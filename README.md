@@ -1,0 +1,2 @@
+# palsta
+Tietokantojen perusteiden ryhmätyö
