@@ -74,4 +74,9 @@ public class AlueDao implements Dao<Alue, Integer> {
         connection.close();
     }
 
+    @Override
+    public void insert() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
