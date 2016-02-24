@@ -17,6 +17,8 @@ public class Keskustelu {
         this.otsikko = otsikko;
 
     }
+    
+    
 
     public Integer getTunnus() {
         return this.tunnus;
