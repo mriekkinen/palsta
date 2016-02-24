@@ -1,0 +1,35 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title th:text="${title}">Keskustelupalsta</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h2 th:text="${title}">Keskustelupalsta</h2>
+            <p>Tällä keskustelupalstalla on seuraavat alueet:</p>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Alue</th>
+                        <th>Web-tunnus</th>
+                        <th>Sarake</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="alue: ${alueet}">
+                        <td th:text="${alue.nimi}">alueen nimi</td>
+                        <td th:text="${alue.nimi}">alueen nimi</td>
+                        <td th:text="${alue.nimi}">alueen nimi</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
