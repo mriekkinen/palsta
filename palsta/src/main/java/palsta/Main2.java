@@ -10,14 +10,12 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 public class Main2 {
 
-    public static void main(String[] args) throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:sqlite:../tietokannat/keskustelut.db");
-        Statement stmt = connection.createStatement();
-        
-        ArrayList<Alue> alueet = new ArrayList<>();
-        alueet.add(new Alue(1, "ajoneuvos", "Moottoriajoneuvot"));
-        alueet.add(new Alue(1, "lentokoneet", "Lentokoneet"));
-        alueet.add(new Alue(1, "pyorat", "Polkupyörät"));
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        // 1. Käynnistä projekti Netbeansissa
+        // 2. Mene selaimella osoitteeseen http://localhost:4567/
+        Database db = new Database("jdbc:sqlite:../tietokannat/keskustelut.db");
+        AlueDao alueDao = new AlueDao(db);
+        List<Alue> alueet = alueDao.findAll();
 
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();

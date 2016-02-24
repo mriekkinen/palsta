@@ -19,14 +19,12 @@
                     <tr>
                         <th>Alue</th>
                         <th>Web-tunnus</th>
-                        <th>Sarake</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="alue: ${alueet}">
-                        <td th:text="${alue.nimi}">alueen nimi</td>
-                        <td th:text="${alue.nimi}">alueen nimi</td>
-                        <td th:text="${alue.nimi}">alueen nimi</td>
+                        <td th:text="${alue.nimi}">nimi</td>
+                        <td th:text="${alue.webTunnus}">web-tunnus</td>
                     </tr>
                 </tbody>
             </table>
