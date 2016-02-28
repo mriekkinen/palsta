@@ -13,20 +13,21 @@
     <body>
         <div class="container">
             <h2 th:text="${title}">Keskustelupalsta</h2>
-            <p>Tällä keskustelupalstalla on seuraavat alueet:</p>
+            <p>Tällä alueella on seuraavat keskustelut:</p>
+            <p>Tällä hetkellä näyttää kaikki kannasta löytyvät keskustelut. DAO-luokkaan voisi lisätä sopivan metodin.</p>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Alue</th>
+                        <th>Keskustelu</th>
                         <th>Viestejä yhteensä</th>
                         <th>Viimeisin viesti</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="alue: ${alueet}">
+                    <tr th:each="keskustelu: ${keskustelut}">
                         <td>
-                            <a th:href="@{~/alue/{t}(t=${alue.webTunnus})}" th:text="${alue.nimi}">
-                                alueen nimi
+                            <a th:href="@{~/keskustelu/{t}(t=${keskustelu.tunnus})}" th:text="${keskustelu.otsikko}">
+                                keskustelun otsikko
                             </a>
                         </td>
                         <td> </td>
