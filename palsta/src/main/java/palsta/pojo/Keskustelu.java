@@ -9,7 +9,7 @@ public class Keskustelu {
     private Integer alue; // Alueen PK
     private String webTunnus;
     private String otsikko;
-//  private List<Viesti> viestit;
+    private List<Viesti> viestit;
 
     public Keskustelu(Integer tunnus, Integer alue, String webTunnus, String otsikko) {
         this.tunnus = tunnus;

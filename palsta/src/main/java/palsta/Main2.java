@@ -16,9 +16,10 @@ public class Main2 {
         Database db = new Database("jdbc:sqlite:../tietokannat/keskustelut.db");
         AlueDao alueDao = new AlueDao(db);
         KeskusteluDao keskusteluDao = new KeskusteluDao(db);
+        ViestiDao viestiDao = new ViestiDao(db);
 
-        List<Alue> alueet = alueDao.findAll();
-        List<Keskustelu> keskustelut = keskusteluDao.findAll();
+        List<Alue> alueet = alueDao.findAll(0);
+        List<Keskustelu> keskustelut = keskusteluDao.findAll(2);
         List<Viesti> viestit = new ArrayList<>();
 
         viestit.add(new Viesti(1, 1, "Matti", "", new Timestamp(1456740000), "Hyvin toimii"));
