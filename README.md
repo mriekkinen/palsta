@@ -10,6 +10,8 @@ Sovellus kuuntelee seuraavan muotoisia web-osoitteita:
 * [http://localhost:4567/](http://localhost:4567/)
 * [http://localhost:4567/alue/ohjelmointi](http://localhost:4567/alue/ohjelmointi)
 * [http://localhost:4567/keskustelu/1](http://localhost:4567/keskustelu/1)
+* [http://localhost:4567/avaa](http://localhost:4567/avaa)
+* [http://localhost:4567/vastaa/1](http://localhost:4567/vastaa/1)
 
 Web-ohjeita:
 

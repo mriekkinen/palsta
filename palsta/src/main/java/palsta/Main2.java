@@ -32,8 +32,8 @@ public class Main2 {
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
 
-        get("/alue/:tunnus", (req, res) -> {
-            String webTunnus = req.params(":tunnus");
+        get("/alue/:webTunnus", (req, res) -> {
+            String webTunnus = req.params(":webTunnus");
 
             HashMap map = new HashMap<>();
             map.put("title", webTunnus);
@@ -51,5 +51,32 @@ public class Main2 {
 
             return new ModelAndView(map, "keskustelu");
         }, new ThymeleafTemplateEngine());
+
+        get("/vastaa/:keskustelunTunnus", (req, res) -> {
+            int tunnus = muunna(req.params(":keskustelunTunnus"));
+            Keskustelu keskustelu = keskusteluDao.findOne(tunnus);
+
+            HashMap map = new HashMap<>();
+            map.put("title", "Vastaa keskusteluun");
+            map.put("keskustelu", keskustelu);
+
+            return new ModelAndView(map, "vastaa");
+        }, new ThymeleafTemplateEngine());
+        
+        get("avaa", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("title", "Avaa keskustelu");
+            
+            return new ModelAndView(map, "avaa");
+        }, new ThymeleafTemplateEngine());
     }
+
+    private static int muunna(String merkkijono) {
+        try {
+            return Integer.parseInt(merkkijono);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
 }
