@@ -15,6 +15,7 @@
             <h2 th:text="${title}">Keskustelu</h2>
             <p>Tässä keskustelussa on seuraavat viestit:</p>
             <p>Tämä sivu ei osaa vielä hakea viestejä kannasta. Tulee käyttämään luokkaa ViestiDao.</p>
+            <p><a th:href="@{~/vastaa/{t}(t=${keskustelunTunnus})}">Vastaa keskusteluun</a></p>
             <ul class="list-group">
                 <li th:each="viesti: ${viestit}" class="list-group-item">
                     <span th:text="${viesti.sisalto}">
