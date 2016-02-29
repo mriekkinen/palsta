@@ -15,6 +15,7 @@
             <h2 th:text="${title}">Keskustelupalsta</h2>
             <p>Tällä alueella on seuraavat keskustelut:</p>
             <p>Tällä hetkellä näyttää kaikki kannasta löytyvät keskustelut. DAO-luokkaan voisi lisätä sopivan metodin.</p>
+            <p><a th:href="@{~/avaa/{t}(t=${alueenWebTunnus})}">Avaa uusi keskustelu</a></p>
             <table class="table table-striped">
                 <thead>
                     <tr>
