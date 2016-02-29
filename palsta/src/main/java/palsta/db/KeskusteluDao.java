@@ -48,10 +48,13 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     @Override
-    public List<Keskustelu> findAll() throws SQLException {
+    public List<Keskustelu> findAll(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu");
-
+        PreparedStatement stmt = connection.prepareStatement("SELECT a.nimi AS Alue, COUNT(v.tunnus) "
+                + "AS viesteja, MAX(v.pvm) AS viimeisin "
+                + "FROM Alue a LEFT JOIN Keskustelu k ON a.tunnus = ? "
+                + "INNER JOIN Viesti v ON k.tunnus = v.keskustelu group by a.tunnus ORDER BY viimeisin");
+        stmt.setObject(1, key);
         ResultSet rs = stmt.executeQuery();
         List<Keskustelu> keskustelut = new ArrayList<>();
         while (rs.next()) {
