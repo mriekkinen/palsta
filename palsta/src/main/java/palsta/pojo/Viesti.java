@@ -12,7 +12,7 @@ public class Viesti {
     private Timestamp pvm;
     private String sisalto;
 
-    public Viesti(Integer tunnus, Integer keskustelu, String lahettaja, String webTunnus, Timestamp pvm, String sisalto) {
+    public Viesti(Integer tunnus, Integer keskustelu, String lahettaja,  Timestamp pvm, String webTunnus, String sisalto) {
         this.tunnus = tunnus;
         this.keskustelu = keskustelu;
         this.lahettaja = lahettaja;

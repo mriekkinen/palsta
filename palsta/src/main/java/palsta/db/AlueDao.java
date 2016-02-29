@@ -13,11 +13,14 @@ public class AlueDao implements Dao<Alue, Integer> {
         this.database = d;
     }
 
-    public int messagesInArea(Integer key) throws SQLException { //viestin määrä alueessa
+    public int messagesInArea(Integer key) throws SQLException { //viestien määrä alueessa
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM Alue a "
-                + "JOIN Keskustelu k ON ? = k.alue "
-                + "JOIN Viesti v ON k.tunnus = v.keskustelu "
+        PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) "
+                + "FROM Alue a "
+                + " JOIN Keskustelu k "
+                + "     ON ? = k.alue "
+                + " JOIN Viesti v "
+                + "     ON k.tunnus = v.keskustelu "
                 + "GROUP BY a.nimi");
         stmt.setObject(1, key);
 
@@ -59,7 +62,7 @@ public class AlueDao implements Dao<Alue, Integer> {
         String webTunnus = rs.getString("web_tunnus");
         String nimi = rs.getString("nimi");
 
-        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, webTunnus, pvm, sisalto);
+        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, webTunnus, sisalto);
 
         rs.close();
         stmt.close();
@@ -118,7 +121,7 @@ public class AlueDao implements Dao<Alue, Integer> {
     @Override
     public void delete(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("delete FROM Alue WHERE tunnus = ?");
+        PreparedStatement stmt = connection.prepareStatement("DELETE FROM Alue WHERE tunnus = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -131,7 +134,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
     @Override
     public void insert() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
 }
