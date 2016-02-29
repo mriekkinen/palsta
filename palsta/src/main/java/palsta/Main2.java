@@ -64,6 +64,15 @@ public class Main2 {
             return new ModelAndView(map, "vastaa");
         }, new ThymeleafTemplateEngine());
         
+        post("/vastaa/:keskustelunTunnus", (req, res) -> {
+            int tunnus = muunna(req.params(":keskustelunTunnus"));
+            Keskustelu keskustelu = keskusteluDao.findOne(tunnus);
+            
+            // keskustelu.insert(...)
+
+            return "Tämä tulee kutsumaan metodia keskustelu.insert...";
+        });
+        
         get("avaa", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("title", "Avaa keskustelu");
