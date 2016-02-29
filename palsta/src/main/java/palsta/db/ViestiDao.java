@@ -77,7 +77,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int tunnus = rs.getInt("tunnus");
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
-            Timestamp pvm = rs.getTimestamp("pvm");
+            Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
             String webTunnus = rs.getString("web_tunnus");
             String sisalto = rs.getString("sisalto");
 
