@@ -9,18 +9,14 @@ public class Keskustelu {
     private Integer alue; // Alueen PK
     private String webTunnus;
     private String otsikko;
-    private List<Viesti> viestit;
 
     public Keskustelu(Integer tunnus, Integer alue, String webTunnus, String otsikko) {
         this.tunnus = tunnus;
         this.alue = alue;
         this.webTunnus = webTunnus;
         this.otsikko = otsikko;
-//      this.viestit = new ArrayList(); // Keskustelu sisältää useita viestejä.
     }
     
-    
-
     public Integer getTunnus() {
         return this.tunnus;
     }

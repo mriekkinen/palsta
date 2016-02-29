@@ -1,24 +1,46 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package palsta.db;
 
 import java.util.*;
 import java.sql.*;
 import palsta.pojo.Keskustelu;
 
-/**
- *
- * @author akiirikk@cs
- */
 public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     private Database database;
 
     public KeskusteluDao(Database d) {
         this.database = d;
+    }
+
+    public List<Keskustelu> findTenNewest() throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.web_tunnus, k.otsikko"
+                + "FROM Alue a\n"
+                + "  INNER JOIN Keskustelu k\n"
+                + "    ON a.tunnus = k.alue\n"
+                + "  LEFT JOIN Viesti v\n"
+                + "    ON k.tunnus = v.keskustelu\n"
+                + "WHERE alue.web_tunnus = ?\n"
+                + "GROUP BY k.tunnus\n"
+                + "ORDER BY viimeisin DESC\n"
+                + "LIMIT 10");
+
+        ResultSet rs = stmt.executeQuery();
+        List<Keskustelu> keskustelut = new ArrayList<>();
+        while (rs.next()) {
+            Integer tunnus = rs.getInt("tunnus");
+            Integer alue = rs.getInt("alue");
+            String webTunnus = rs.getString("web_tunnus");
+            String otsikko = rs.getString("otsikko");
+
+            keskustelut.add(new Keskustelu(tunnus, alue, webTunnus, otsikko));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return keskustelut;
     }
 
     @Override
@@ -48,13 +70,10 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     @Override
-    public List<Keskustelu> findAll(Integer key) throws SQLException {
+    public List<Keskustelu> findAll() throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT a.nimi AS Alue, COUNT(v.tunnus) "
-                + "AS viesteja, MAX(v.pvm) AS viimeisin "
-                + "FROM Alue a LEFT JOIN Keskustelu k ON a.tunnus = ? "
-                + "INNER JOIN Viesti v ON k.tunnus = v.keskustelu group by a.tunnus ORDER BY viimeisin");
-        stmt.setObject(1, key);
+        PreparedStatement stmt = connection.prepareStatement("SELECT * From Keskustelu");
+
         ResultSet rs = stmt.executeQuery();
         List<Keskustelu> keskustelut = new ArrayList<>();
         while (rs.next()) {
@@ -83,9 +102,8 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         rs.close();
         stmt.close();
         connection.close();
-
     }
-    
+
     @Override
     public void insert() throws SQLException { // Ei miään hajua miten tää lisäys hoituu
 //        Connection connection = database.getConnection();
@@ -97,7 +115,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 //                + keskustelu.getSalary() + " );";
 //
 //        db.update(sql);
-        
+
     }
 
 }
