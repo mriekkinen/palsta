@@ -19,7 +19,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         this.database = d;
     }
 
-    public List<Viesti> findTopicsMessages(Integer key) throws SQLException {
+    public List<Viesti> findConvosMessages(Integer key) throws SQLException { // Jonkin keskustelun viestit
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE keskustelu = ?");
         stmt.setObject(1, key);

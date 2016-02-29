@@ -11,7 +11,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     public KeskusteluDao(Database d) {
         this.database = d;
     }
-
+    
     public List<Keskustelu> findTenNewest() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.web_tunnus, k.otsikko"
