@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package palsta.db;
 
 import java.sql.Connection;
@@ -16,16 +11,38 @@ import palsta.pojo.Alue;
 import palsta.pojo.Keskustelu;
 import palsta.pojo.Viesti;
 
-/**
- *
- * @author esva
- */
 public class ViestiDao implements Dao<Viesti, Integer> {
 
     private Database database;
 
     public ViestiDao(Database d) {
         this.database = d;
+    }
+
+    public List<Viesti> findTopicsMessages(Integer key) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE keskustelu = ?");
+        stmt.setObject(1, key);
+
+        ResultSet rs = stmt.executeQuery();
+
+        List<Viesti> lista = new ArrayList<>();
+        while (rs.next()) {
+            int tunnus = rs.getInt("tunnus");
+            int keskustelu = rs.getInt("keskustelu");
+            String lahettaja = rs.getString("lahettaja");
+            Timestamp pvm = rs.getTimestamp("pvm");
+            String sisalto = rs.getString("sisalto");
+            String webTunnus = rs.getString("web_tunnus");
+            String nimi = rs.getString("nimi");
+
+            lista.add(new Viesti(tunnus, keskustelu, lahettaja, webTunnus, pvm, sisalto));
+        }
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return lista;
     }
 
     @Override
@@ -58,9 +75,9 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     }
 
     @Override
-    public List<Viesti> findAll(Integer key) throws SQLException {
+    public List<Viesti> findAll() throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE keskustelu = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti");
 
         ResultSet rs = stmt.executeQuery();
 
