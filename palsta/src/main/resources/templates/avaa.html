@@ -1,0 +1,34 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title th:text="${title}">Avaa keskustelu</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h2 th:text="${title}">Avaa keskustelu</h2>
+            <form role="form">
+                <div class="form-group">
+                    <label for="otsikko">Otsikko:</label>
+                    <input type="text" class="form-control" id="otsikko" placeholder="Syötä keskustelun otsikko" />
+                </div>
+                <div class="form-group">
+                    <label for="nimimerkki">Nimimerkki:</label>
+                    <input type="text" class="form-control" id="nimimerkki" placeholder="Syötä nimimerkki" />
+                </div>
+                <div class="form-group">
+                    <label for="viesti">Viesti:</label>
+                    <textarea class="form-control" rows="5" id="viesti" placeholder="Kirjoita viesti"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Lähetä</button>
+            </form>
+        </div>
+    </body>
+
+</html>
