@@ -19,7 +19,7 @@ public class Main {
         ViestiDao viestiDao = new ViestiDao(db);
 
         List<Alue> alueet = alueDao.findAll();
-        List<Keskustelu> keskustelut = keskusteluDao.findAll();
+        List<Keskustelu> keskustelut = keskusteluDao.findTenNewest("urheilu");
         List<Viesti> viestit = viestiDao.findAll();
 
         get("/", (req, res) -> {

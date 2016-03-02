@@ -12,18 +12,19 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         this.database = d;
     }
     
-    public List<Keskustelu> findTenNewest() throws SQLException {
+    public List<Keskustelu> findTenNewest(String webtunnus) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.web_tunnus, k.otsikko"
-                + "FROM Alue a\n"
-                + "  INNER JOIN Keskustelu k\n"
-                + "    ON a.tunnus = k.alue\n"
-                + "  LEFT JOIN Viesti v\n"
-                + "    ON k.tunnus = v.keskustelu\n"
-                + "WHERE alue.web_tunnus = ?\n"
-                + "GROUP BY k.tunnus\n"
-                + "ORDER BY viimeisin DESC\n"
+        PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.web_tunnus, k.otsikko, MAX(v.pvm) AS viimeisin "
+                + "FROM Alue a "
+                + "INNER JOIN Keskustelu k "
+                + "ON a.tunnus = k.alue "
+                + "LEFT JOIN Viesti v "
+                + "ON k.tunnus = v.keskustelu "
+                + "WHERE a.web_tunnus = ? "
+                + "GROUP BY k.tunnus "
+                + "ORDER BY viimeisin DESC "
                 + "LIMIT 10");
+        stmt.setObject(1, webtunnus);
 
         ResultSet rs = stmt.executeQuery();
         List<Keskustelu> keskustelut = new ArrayList<>();

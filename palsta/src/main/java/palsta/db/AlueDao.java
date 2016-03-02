@@ -38,7 +38,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         return viesteja;
     }
-    
+
     public Viesti newestMessageInArea(Integer key) throws SQLException { // alueen uusin viesti
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT v.tunnus, v.keskustelu, v.lahettaja, v.pvm, v.web_tunnus, v.sisalto FROM Alue a "
@@ -70,7 +70,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         return viesti;
     }
-    
+
     @Override
     public Alue findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
@@ -99,7 +99,15 @@ public class AlueDao implements Dao<Alue, Integer> {
     @Override
     public List<Alue> findAll() throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alue");
+        PreparedStatement stmt = connection.prepareStatement(
+                  "SELECT a.tunnus, a.web_tunnus, a.nimi AS alue, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin"
+                + " FROM Alue a"
+                + " LEFT JOIN Keskustelu k"
+                + " ON a.tunnus = k.alue"
+                + " INNER JOIN Viesti v"
+                + " ON k.tunnus = v.keskustelu"
+                + " GROUP BY a.tunnus"
+                + " ORDER BY alue");
 
         ResultSet rs = stmt.executeQuery();
 
@@ -107,9 +115,11 @@ public class AlueDao implements Dao<Alue, Integer> {
         while (rs.next()) {
             int tunnus = rs.getInt("tunnus");
             String webTunnus = rs.getString("web_tunnus");
-            String nimi = rs.getString("nimi");
+            String nimi = rs.getString("alue");
+            int viestejaYhteensa = rs.getInt("viesteja");
+            Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
 
-            lista.add(new Alue(tunnus, webTunnus, nimi));
+            lista.add(new Alue(tunnus, webTunnus, nimi, viestejaYhteensa, viimeisin));
         }
         rs.close();
         stmt.close();
@@ -126,7 +136,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         ResultSet rs = stmt.executeQuery();
         rs.next();
-        
+
         rs.close();
         stmt.close();
         connection.close();
@@ -134,7 +144,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
     @Override
     public void insert() throws SQLException {
-        
+
     }
 
 }
