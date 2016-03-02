@@ -143,8 +143,18 @@ public class AlueDao implements Dao<Alue, Integer> {
     }
 
     @Override
-    public void insert() throws SQLException {
+    public void insert(Object... params) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(webTunnus, nimi) VALUES (?, ?)");
 
+        for (int i = 0; i < params.length; i++) {
+            stmt.setObject(i + 1, params[i]);
+        }
+
+        int changes = stmt.executeUpdate();
+
+        stmt.close();
+        connection.close();
     }
 
 }

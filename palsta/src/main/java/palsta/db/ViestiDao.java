@@ -105,8 +105,18 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     }
 
     @Override
-    public void insert() throws SQLException {
-        
+    public void insert(Object... params) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskustelu, lahettaja, pvm, webTunnus, sisalto) VALUES (?, ?, ?, ?, ?)");
+
+        for (int i = 0; i < params.length; i++) {
+            stmt.setObject(i + 1, params[i]);
+        }
+
+        int changes = stmt.executeUpdate();
+
+        stmt.close();
+        connection.close();
     }
 
 }
