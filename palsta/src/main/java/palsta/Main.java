@@ -19,8 +19,7 @@ public class Main {
         ViestiDao viestiDao = new ViestiDao(db);
 
         List<Alue> alueet = alueDao.findAll();
-        List<Keskustelu> keskustelut = keskusteluDao.findTenNewest("urheilu");
-        List<Viesti> viestit = viestiDao.findAll();
+        
 
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -32,9 +31,11 @@ public class Main {
 
         get("/alue/:webTunnus", (req, res) -> {
             String webTunnus = req.params(":webTunnus");
-
+            List<Keskustelu> keskustelut = keskusteluDao.findTenNewest(webTunnus);
+            
+            
             HashMap map = new HashMap<>();
-            map.put("title", webTunnus);
+            map.put("title", alueDao.findOne(webTunnus).getNimi());
             map.put("keskustelut", keskustelut);
             map.put("alueenWebTunnus", webTunnus);
 
@@ -42,10 +43,11 @@ public class Main {
         }, new ThymeleafTemplateEngine());
 
         get("/keskustelu/:tunnus", (req, res) -> {
-            String tunnus = req.params(":tunnus");
+            int tunnus = muunna(req.params(":tunnus"));
+            List<Viesti> viestit = viestiDao.findConvosMessages(tunnus);
 
             HashMap map = new HashMap<>();
-            map.put("title", tunnus);
+            map.put("title", keskusteluDao.findOne(tunnus).getOtsikko());
             map.put("viestit", viestit);
             map.put("keskustelunTunnus", tunnus);
 

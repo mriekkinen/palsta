@@ -40,6 +40,13 @@ public class Keskustelu {
     
     public String getOtsikko() {
         return this.otsikko;
-    } 
+    }
 
+    public int getViestejaYhteensa() {
+        return viestejaYhteensa;
+    }
+
+    public Timestamp getUusinViesti() {
+        return uusinViesti;
+    }
 }

@@ -95,6 +95,29 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         return alue;
     }
+    
+    public Alue findOne(String webTunnus) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alue WHERE web_tunnus = ?");
+        stmt.setObject(1, webTunnus);
+
+        ResultSet rs = stmt.executeQuery();
+        boolean hasOne = rs.next();
+        if (!hasOne) {
+            return null;
+        }
+
+        int tunnus = rs.getInt("tunnus");
+        String nimi = rs.getString("nimi");
+
+        Alue alue = new Alue(tunnus, webTunnus, nimi);
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return alue;
+    }
 
     @Override
     public List<Alue> findAll() throws SQLException {

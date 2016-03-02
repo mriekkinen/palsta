@@ -14,7 +14,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     
     public List<Keskustelu> findTenNewest(String webtunnus) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.web_tunnus, k.otsikko, MAX(v.pvm) AS viimeisin "
+        PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.web_tunnus, k.otsikko, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin "
                 + "FROM Alue a "
                 + "INNER JOIN Keskustelu k "
                 + "ON a.tunnus = k.alue "
@@ -33,8 +33,10 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
             Integer alue = rs.getInt("alue");
             String webTunnus = rs.getString("web_tunnus");
             String otsikko = rs.getString("otsikko");
+            int viestejaYhteensa = rs.getInt("viesteja");
+            Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
 
-            keskustelut.add(new Keskustelu(tunnus, alue, webTunnus, otsikko));
+            keskustelut.add(new Keskustelu(tunnus, alue, webTunnus, otsikko, viestejaYhteensa, viimeisin));
         }
 
         rs.close();
