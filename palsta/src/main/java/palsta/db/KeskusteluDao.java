@@ -105,17 +105,18 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     @Override
-    public void insert() throws SQLException { // Ei miään hajua miten tää lisäys hoituu
-//        Connection connection = database.getConnection();
-//        String sql = "INSERT INTO EMPLOYEE "
-//                + "(tunnus, alue, web_tunnus, otsikko) VALUES ("
-//                + s(keskustelu.getTunnus()) + ", "
-//                + keskustelu.getAlue() + ", "
-//                + s(keskustelu.getWebTunnus()) + ", "
-//                + keskustelu.getSalary() + " );";
-//
-//        db.update(sql);
+    public void insert(Object... params) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, webTunnus, otsikko) VALUES (?, ?, ?)");
 
+        for (int i = 0; i < params.length; i++) {
+            stmt.setObject(i + 1, params[i]);
+        }
+
+        int changes = stmt.executeUpdate();
+
+        stmt.close();
+        connection.close();
     }
 
 }
