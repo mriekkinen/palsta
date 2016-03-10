@@ -41,7 +41,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
     public Viesti newestMessageInArea(Integer key) throws SQLException { // alueen uusin viesti
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT v.tunnus, v.keskustelu, v.lahettaja, v.pvm, v.web_tunnus, v.sisalto FROM Alue a "
+        PreparedStatement stmt = connection.prepareStatement("SELECT v.tunnus, v.keskustelu, v.lahettaja, v.pvm, v.sisalto FROM Alue a "
                 + "JOIN Keskustelu k ON ? = k.alue "
                 + "JOIN Viesti v ON k.tunnus = v.keskustelu "
                 + "ORDER BY v.pvm "
@@ -62,7 +62,7 @@ public class AlueDao implements Dao<Alue, Integer> {
         String webTunnus = rs.getString("web_tunnus");
         String nimi = rs.getString("nimi");
 
-        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, webTunnus, sisalto);
+        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto);
 
         rs.close();
         stmt.close();
@@ -95,7 +95,7 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         return alue;
     }
-    
+
     public Alue findOne(String webTunnus) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alue WHERE web_tunnus = ?");
@@ -123,7 +123,7 @@ public class AlueDao implements Dao<Alue, Integer> {
     public List<Alue> findAll() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement(
-                  "SELECT a.tunnus, a.web_tunnus, a.nimi AS alue, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin"
+                "SELECT a.tunnus, a.web_tunnus, a.nimi AS alue, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin"
                 + " FROM Alue a"
                 + " LEFT JOIN Keskustelu k"
                 + " ON a.tunnus = k.alue"

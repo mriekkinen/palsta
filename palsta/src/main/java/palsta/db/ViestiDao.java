@@ -25,10 +25,9 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
             Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
-            String webTunnus = rs.getString("web_tunnus");
             String sisalto = rs.getString("sisalto");
 
-            viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, webTunnus, sisalto));
+            viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto));
         }
         rs.close();
         stmt.close();
@@ -53,10 +52,9 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         int keskustelu = rs.getInt("keskustelu");
         String lahettaja = rs.getString("lahettaja");
         Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
-        String webTunnus = rs.getString("web_tunnus");
         String sisalto = rs.getString("sisalto");
 
-        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, webTunnus, sisalto);
+        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto);
 
         rs.close();
         stmt.close();
@@ -78,11 +76,11 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
             Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
-            String webTunnus = rs.getString("web_tunnus");
             String sisalto = rs.getString("sisalto");
 
-            viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, webTunnus, sisalto));
+            viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto));
         }
+
         rs.close();
         stmt.close();
         connection.close();
@@ -107,7 +105,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
     @Override
     public void insert(Object... params) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskustelu, lahettaja, pvm, webTunnus, sisalto) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskustelu, lahettaja, pvm, sisalto) VALUES (?, ?, ?, ?)");
 
         for (int i = 0; i < params.length; i++) {
             stmt.setObject(i + 1, params[i]);

@@ -11,10 +11,10 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     public KeskusteluDao(Database d) {
         this.database = d;
     }
-    
+
     public List<Keskustelu> findTenNewest(String webtunnus) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.web_tunnus, k.otsikko, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin "
+        PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.otsikko, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin "
                 + "FROM Alue a "
                 + "INNER JOIN Keskustelu k "
                 + "ON a.tunnus = k.alue "
@@ -31,12 +31,11 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         while (rs.next()) {
             Integer tunnus = rs.getInt("tunnus");
             Integer alue = rs.getInt("alue");
-            String webTunnus = rs.getString("web_tunnus");
             String otsikko = rs.getString("otsikko");
             int viestejaYhteensa = rs.getInt("viesteja");
             Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
 
-            keskustelut.add(new Keskustelu(tunnus, alue, webTunnus, otsikko, viestejaYhteensa, viimeisin));
+            keskustelut.add(new Keskustelu(tunnus, alue, otsikko, viestejaYhteensa, viimeisin));
         }
 
         rs.close();
@@ -60,16 +59,15 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
         Integer tunnus = rs.getInt("tunnus");
         Integer alue = rs.getInt("alue");
-        String webTunnus = rs.getString("web_tunnus");
         String otsikko = rs.getString("otsikko");
 
-        Keskustelu k = new Keskustelu(tunnus, alue, webTunnus, otsikko);
+        Keskustelu k = new Keskustelu(tunnus, alue, otsikko);
 
         rs.close();
         stmt.close();
         connection.close();
 
-        return k; //To change body of generated methods, choose Tools | Templates.
+        return k;
     }
 
     @Override
@@ -82,10 +80,9 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         while (rs.next()) {
             Integer tunnus = rs.getInt("tunnus");
             Integer alue = rs.getInt("alue");
-            String webTunnus = rs.getString("web_tunnus");
             String otsikko = rs.getString("otsikko");
 
-            keskustelut.add(new Keskustelu(tunnus, alue, webTunnus, otsikko));
+            keskustelut.add(new Keskustelu(tunnus, alue, otsikko));
         }
 
         rs.close();
@@ -110,7 +107,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     @Override
     public void insert(Object... params) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, webTunnus, otsikko) VALUES (?, ?, ?)");
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, otsikko) VALUES (?, ?)");
 
         for (int i = 0; i < params.length; i++) {
             stmt.setObject(i + 1, params[i]);
