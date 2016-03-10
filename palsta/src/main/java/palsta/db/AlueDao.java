@@ -95,6 +95,8 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         return alue;
     }
+    
+   
 
     public Alue findOne(String webTunnus) throws SQLException {
         Connection connection = database.getConnection();
@@ -140,7 +142,7 @@ public class AlueDao implements Dao<Alue, Integer> {
             String webTunnus = rs.getString("web_tunnus");
             String nimi = rs.getString("alue");
             int viestejaYhteensa = rs.getInt("viesteja");
-            Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
+            Timestamp viimeisin = rs.getTimestamp("viimeisin");
 
             lista.add(new Alue(tunnus, webTunnus, nimi, viestejaYhteensa, viimeisin));
         }
@@ -166,13 +168,12 @@ public class AlueDao implements Dao<Alue, Integer> {
     }
 
  
-    public void insert(Object... params) throws SQLException {
+    public void insert(String webTunnus, String nimi) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(webTunnus, nimi) VALUES (?, ?)");
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Alue(webTunnus, nimi) VALUES (?, ?)");
 
-        for (int i = 0; i < params.length; i++) {
-            stmt.setObject(i + 1, params[i]);
-        }
+        stmt.setObject(1, webTunnus);
+        stmt.setObject(2, nimi);
 
         int changes = stmt.executeUpdate();
 

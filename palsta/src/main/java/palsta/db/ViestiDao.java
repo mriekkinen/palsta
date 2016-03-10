@@ -24,7 +24,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int tunnus = rs.getInt("tunnus");
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
-            Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
+            Timestamp pvm = rs.getTimestamp("pvm");
             String sisalto = rs.getString("sisalto");
 
             viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto));
@@ -104,7 +104,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         connection.close();
     }
 
-    public void insert(int tunnus, String lahettaja, Timestamp pvm, int webtunnus, String sisalto) throws SQLException {
+    public void insert(int tunnus, String lahettaja, Timestamp pvm, String sisalto) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskustelu, lahettaja, pvm, sisalto) VALUES (?, ?, ?, ?)");
 

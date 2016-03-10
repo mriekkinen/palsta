@@ -13,12 +13,10 @@ public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // 1. Käynnistä projekti Netbeansissa
         // 2. Mene selaimella osoitteeseen http://localhost:4567/
-        Database db = new Database("jdbc:sqlite:../tietokannat/keskustelut.db");
+        Database db = new Database("jdbc:sqlite:../tietokannat/keskustelut-ylimaaraiset-sarakkeet-poistettu.db");
         AlueDao alueDao = new AlueDao(db);
         KeskusteluDao keskusteluDao = new KeskusteluDao(db);
         ViestiDao viestiDao = new ViestiDao(db);
-        
-
 
         List<Alue> alueet = alueDao.findAll();
 
@@ -71,15 +69,15 @@ public class Main {
             String lahettaja = req.queryParams("nimimerkki");
             String viesti = req.queryParams("viesti");
             //java.util.Date date= new java.util.Date();
-            
+
             Calendar calendar = Calendar.getInstance();
 
             java.util.Date now = calendar.getTime();
 
             java.sql.Timestamp timestamp = new java.sql.Timestamp(now.getTime());
 
-            viestiDao.insert(tunnus, lahettaja, timestamp, 1, viesti);
-
+            viestiDao.insert(tunnus, lahettaja, timestamp, viesti);
+            res.redirect("/keskustelu/" + tunnus);
             return lahettaja + ": " + viesti + " (keskustelu " + tunnus + ")";
         });
 
@@ -95,16 +93,30 @@ public class Main {
             return new ModelAndView(map, "avaa");
         }, new ThymeleafTemplateEngine());
 
-        post("avaa", (req, res) -> {
+        post("avaa", (req, res) -> {   //// KESKUSTELU
             String webTunnus = req.queryParams("alueenWebTunnus");
             String otsikko = req.queryParams("otsikko");
             String nimimerkki = req.queryParams("nimimerkki");
             String viesti = req.queryParams("viesti");
+            int alueTunnus = alueDao.findOne(webTunnus).getTunnus();
 
+            Calendar calendar = Calendar.getInstance();
 
-            // keskusteluDao.insert(alueenWebTunnus, otsikko, lahettaja, sisalto)
+            java.util.Date now = calendar.getTime();
+
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(now.getTime());
+
+           keskusteluDao.insert(alueTunnus, otsikko);
+           
+           
+           
+           viestiDao.insert(keskusteluDao.findPrimaryKey(otsikko),nimimerkki, timestamp, viesti);
+           
+           //res.redirect("/" + webTunnus);
+           
             return nimimerkki + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
         });
+
     }
 
     private static int muunna(String merkkijono) {

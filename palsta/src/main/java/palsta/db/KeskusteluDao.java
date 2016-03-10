@@ -105,18 +105,37 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
    
-    public void insert(Object... params) throws SQLException {
+    public void insert(int alue, String otsikko) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, otsikko) VALUES (?, ?)");
 
-        for (int i = 0; i < params.length; i++) {
-            stmt.setObject(i + 1, params[i]);
-        }
+        stmt.setObject(1, alue);
+        stmt.setObject(2, otsikko);
+       
 
         int changes = stmt.executeUpdate();
 
         stmt.close();
         connection.close();
+    }
+    
+    public int findPrimaryKey(String otsikko) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT tunnus FROM Keskustelu WHERE otsikko = ?");
+        
+        stmt.setObject(1, otsikko);
+        ResultSet rs = stmt.executeQuery();
+
+        Integer tunnus = rs.getInt("tunnus");
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return tunnus;
+        
+        
+        
     }
 
 }
