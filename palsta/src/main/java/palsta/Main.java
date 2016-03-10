@@ -19,7 +19,6 @@ public class Main {
         ViestiDao viestiDao = new ViestiDao(db);
 
         List<Alue> alueet = alueDao.findAll();
-        
 
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -32,8 +31,7 @@ public class Main {
         get("/alue/:webTunnus", (req, res) -> {
             String webTunnus = req.params(":webTunnus");
             List<Keskustelu> keskustelut = keskusteluDao.findTenNewest(webTunnus);
-            
-            
+
             HashMap map = new HashMap<>();
             map.put("title", alueDao.findOne(webTunnus).getNimi());
             map.put("keskustelut", keskustelut);
@@ -66,29 +64,36 @@ public class Main {
         }, new ThymeleafTemplateEngine());
 
         post("/vastaa", (req, res) -> {
-            int tunnus = muunna(req.params("keskustelunTunnus"));
+            int tunnus = muunna(req.queryParams("keskustelunTunnus"));
+            String lahettaja = req.queryParams("nimimerkki");
+            String viesti = req.queryParams("viesti");
+
             Keskustelu keskustelu = keskusteluDao.findOne(tunnus);
 
             // viestiDao.insert(keskustelunTunnus, lahettaja, sisalto)
-            return "Tämä tulee kutsumaan metodia viestiDao.insert...";
+            return lahettaja + ": " + viesti + " (keskustelu " + tunnus + ")";
         });
 
         get("avaa/:alueenWebTunnus", (req, res) -> {
             String webTunnus = req.params(":alueenWebTunnus");
 
-            // Alue alue = alueDao.findOne( webTunnus )
+            Alue alue = alueDao.findOne(webTunnus);
+
             HashMap map = new HashMap<>();
             map.put("title", "Avaa keskustelu");
-            //map.put("alue", alue);
+            map.put("alue", alue);
 
             return new ModelAndView(map, "avaa");
         }, new ThymeleafTemplateEngine());
 
         post("avaa", (req, res) -> {
-            String webTunnus = req.params("alueenWebTunnus");
+            String webTunnus = req.queryParams("alueenWebTunnus");
+            String otsikko = req.queryParams("otsikko");
+            String nimimerkki = req.queryParams("nimimerkki");
+            String viesti = req.queryParams("viesti");
 
             // keskusteluDao.insert(alueenWebTunnus, otsikko, lahettaja, sisalto)
-            return "Tämä tulee kutsumaan metodia keskusteluDao.insert...";
+            return nimimerkki + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
         });
     }
 
