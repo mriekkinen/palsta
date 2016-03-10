@@ -7,89 +7,46 @@ import palsta.pojo.Keskustelu;
 public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     private Database database;
+    private QueryMaker query;
 
-    public KeskusteluDao(Database d) {
+    private final String selectQueryStart = ""
+            + "SELECT k.tunnus, k.alue, k.otsikko, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin "
+            + "FROM Alue a "
+            + "INNER JOIN Keskustelu k "
+            + "ON a.tunnus = k.alue "
+            + "LEFT JOIN Viesti v "
+            + "ON k.tunnus = v.keskustelu ";
+
+    public KeskusteluDao(Database d) throws SQLException {
         this.database = d;
+        this.query = new QueryMaker(database.getConnection(), new Keskustelukeraaja());
     }
 
-    public List<Keskustelu> findTenNewest(String webtunnus) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT k.tunnus, k.alue, k.otsikko, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin "
-                + "FROM Alue a "
-                + "INNER JOIN Keskustelu k "
-                + "ON a.tunnus = k.alue "
-                + "LEFT JOIN Viesti v "
-                + "ON k.tunnus = v.keskustelu "
+    public List<Keskustelu> findOffset(String webtunnus, int limit, int offset) throws SQLException {
+        return query.queryAndCollect(selectQueryStart
                 + "WHERE a.web_tunnus = ? "
                 + "GROUP BY k.tunnus "
                 + "ORDER BY viimeisin DESC "
-                + "LIMIT 10");
-        stmt.setObject(1, webtunnus);
-
-        ResultSet rs = stmt.executeQuery();
-        List<Keskustelu> keskustelut = new ArrayList<>();
-        while (rs.next()) {
-            Integer tunnus = rs.getInt("tunnus");
-            Integer alue = rs.getInt("alue");
-            String otsikko = rs.getString("otsikko");
-            int viestejaYhteensa = rs.getInt("viesteja");
-            Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
-
-            keskustelut.add(new Keskustelu(tunnus, alue, otsikko, viestejaYhteensa, viimeisin));
-        }
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return keskustelut;
+                + "LIMIT ? OFFSET ?",
+                webtunnus, limit, offset);
     }
 
     @Override
     public Keskustelu findOne(Integer key) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu WHERE tunnus = ?");
-        stmt.setObject(1, key);
+        List<Keskustelu> lista = query.queryAndCollect(selectQueryStart + "WHERE k.tunnus = ?", key);
 
-        ResultSet rs = stmt.executeQuery();
-        boolean hasOne = rs.next();
-        if (!hasOne) {
+        if (lista.isEmpty()) {
             return null;
         }
 
-        Integer tunnus = rs.getInt("tunnus");
-        Integer alue = rs.getInt("alue");
-        String otsikko = rs.getString("otsikko");
-
-        Keskustelu k = new Keskustelu(tunnus, alue, otsikko);
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return k;
+        return lista.get(0);
     }
 
     @Override
     public List<Keskustelu> findAll() throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * From Keskustelu");
-
-        ResultSet rs = stmt.executeQuery();
-        List<Keskustelu> keskustelut = new ArrayList<>();
-        while (rs.next()) {
-            Integer tunnus = rs.getInt("tunnus");
-            Integer alue = rs.getInt("alue");
-            String otsikko = rs.getString("otsikko");
-
-            keskustelut.add(new Keskustelu(tunnus, alue, otsikko));
-        }
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return keskustelut;
+        return query.queryAndCollect(selectQueryStart
+                + "GROUP BY k.tunnus "
+                + "ORDER BY viimeisin DESC");
     }
 
     @Override
@@ -104,25 +61,23 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         connection.close();
     }
 
-   
     public void insert(int alue, String otsikko) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, otsikko) VALUES (?, ?)");
 
         stmt.setObject(1, alue);
         stmt.setObject(2, otsikko);
-       
 
         int changes = stmt.executeUpdate();
 
         stmt.close();
         connection.close();
     }
-    
+
     public int findPrimaryKey(String otsikko) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT tunnus FROM Keskustelu WHERE otsikko = ?");
-        
+
         stmt.setObject(1, otsikko);
         ResultSet rs = stmt.executeQuery();
 
@@ -133,9 +88,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         connection.close();
 
         return tunnus;
-        
-        
-        
+
     }
 
 }
