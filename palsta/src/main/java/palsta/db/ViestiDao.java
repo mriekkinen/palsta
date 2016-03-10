@@ -25,10 +25,9 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
             Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
-            String webTunnus = rs.getString("web_tunnus");
             String sisalto = rs.getString("sisalto");
 
-            viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, webTunnus, sisalto));
+            viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto));
         }
         rs.close();
         stmt.close();
@@ -53,10 +52,9 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         int keskustelu = rs.getInt("keskustelu");
         String lahettaja = rs.getString("lahettaja");
         Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
-        String webTunnus = rs.getString("web_tunnus");
         String sisalto = rs.getString("sisalto");
 
-        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, webTunnus, sisalto);
+        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto);
 
         rs.close();
         stmt.close();
@@ -77,12 +75,14 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int tunnus = rs.getInt("tunnus");
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
+
             Timestamp pvm = rs.getTimestamp("pvm");
-            String webTunnus = rs.getString("web_tunnus");
+
             String sisalto = rs.getString("sisalto");
 
-            viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, webTunnus, sisalto));
+            viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto));
         }
+
         rs.close();
         stmt.close();
         connection.close();
@@ -104,23 +104,14 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         connection.close();
     }
 
-   
-   
-    public void insert(int tunnus, String lahettaja, Timestamp pvm, int webtunnus , String sisalto) throws SQLException {
+    public void insert(int tunnus, String lahettaja, Timestamp pvm, int webtunnus, String sisalto) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO "
-                + "Viesti(keskustelu, lahettaja, pvm, web_tunnus, sisalto) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskustelu, lahettaja, pvm, sisalto) VALUES (?, ?, ?, ?)");
 
         stmt.setObject(1, tunnus);
         stmt.setObject(2, lahettaja);
         stmt.setObject(3, pvm);
-        stmt.setObject(4, webtunnus);
-        stmt.setObject(5, sisalto);
-        
-        
-//        for (int i = 0; i < params.length; i++) {
-//            stmt.setObject(i + 1, params[i]);
-//        }
+        stmt.setObject(4, sisalto);
 
         stmt.executeUpdate();
 

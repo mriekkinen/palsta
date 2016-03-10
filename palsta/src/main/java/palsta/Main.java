@@ -68,9 +68,8 @@ public class Main {
         post("/vastaa", (req, res) -> {
             int tunnus = muunna(req.queryParams("keskustelunTunnus"));
 
-            //Keskustelu keskustelu = keskusteluDao.findOne(tunnus);
             String lahettaja = req.queryParams("nimimerkki");
-            String sisalto = req.queryParams("viesti");
+            String viesti = req.queryParams("viesti");
             //java.util.Date date= new java.util.Date();
             
             Calendar calendar = Calendar.getInstance();
@@ -79,28 +78,32 @@ public class Main {
 
             java.sql.Timestamp timestamp = new java.sql.Timestamp(now.getTime());
 
-            viestiDao.insert(tunnus, lahettaja, timestamp, 1, sisalto);
+            viestiDao.insert(tunnus, lahettaja, timestamp, 1, viesti);
 
-            //res.redirect("/");
-            return "Tämä tulee kutsumaan metodia viestiDao.insert...";
+            return lahettaja + ": " + viesti + " (keskustelu " + tunnus + ")";
         });
 
         get("avaa/:alueenWebTunnus", (req, res) -> {
             String webTunnus = req.params(":alueenWebTunnus");
 
-            // Alue alue = alueDao.findOne( webTunnus )
+            Alue alue = alueDao.findOne(webTunnus);
+
             HashMap map = new HashMap<>();
             map.put("title", "Avaa keskustelu");
-            //map.put("alue", alue);
+            map.put("alue", alue);
 
             return new ModelAndView(map, "avaa");
         }, new ThymeleafTemplateEngine());
 
         post("avaa", (req, res) -> {
-            String webTunnus = req.params(":alueenWebTunnus");
+            String webTunnus = req.queryParams("alueenWebTunnus");
+            String otsikko = req.queryParams("otsikko");
+            String nimimerkki = req.queryParams("nimimerkki");
+            String viesti = req.queryParams("viesti");
+
 
             // keskusteluDao.insert(alueenWebTunnus, otsikko, lahettaja, sisalto)
-            return "Tämä tulee kutsumaan metodia keskusteluDao.insert...";
+            return nimimerkki + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
         });
     }
 
