@@ -16,15 +16,14 @@ public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // 1. Käynnistä projekti Netbeansissa
         // 2. Mene selaimella osoitteeseen http://localhost:4567/
-        Database db = new Database("jdbc:sqlite:../tietokannat/keskustelut-ylimaaraiset-sarakkeet-poistettu.db");
+        Database db = new Database("jdbc:sqlite:../tietokannat/keskustelut.db");
         AlueDao alueDao = new AlueDao(db);
         KeskusteluDao keskusteluDao = new KeskusteluDao(db);
         ViestiDao viestiDao = new ViestiDao(db);
         Calendar calendar = Calendar.getInstance();
 
-        List<Alue> alueet = alueDao.findAll();
-
         get("/", (req, res) -> {
+            List<Alue> alueet = alueDao.findAll();
             HashMap map = new HashMap<>();
             map.put("title", "Keskustelupalsta");
             map.put("alueet", alueet);
