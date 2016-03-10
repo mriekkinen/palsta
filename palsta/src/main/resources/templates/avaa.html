@@ -13,7 +13,7 @@
     <body>
         <div class="container">
             <h2 th:text="${title}">Avaa keskustelu</h2>
-            <p>Alueelle: [tarvitaan metodi alueDao.findOne(webTunnus)]</p>
+            <p>Alueelle: <span th:text="${alue.nimi}"></span></p>
             <form method="POST" action="/avaa" role="form">
                 <div class="form-group">
                     <label for="otsikko">Otsikko:</label>
