@@ -10,7 +10,7 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 public class Main {
 
-    public static final int keskusteluitaSivulla = 2;
+    public static final int keskusteluitaSivulla = 10;
     public static final int viestejaSivulla = 10;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
