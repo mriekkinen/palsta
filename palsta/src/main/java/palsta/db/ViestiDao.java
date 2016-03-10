@@ -77,7 +77,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int tunnus = rs.getInt("tunnus");
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
-            Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
+            Timestamp pvm = rs.getTimestamp("pvm");
             String webTunnus = rs.getString("web_tunnus");
             String sisalto = rs.getString("sisalto");
 
@@ -104,16 +104,25 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         connection.close();
     }
 
-    @Override
-    public void insert(Object... params) throws SQLException {
+   
+   
+    public void insert(int tunnus, String lahettaja, Timestamp pvm, int webtunnus , String sisalto) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskustelu, lahettaja, pvm, webTunnus, sisalto) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO "
+                + "Viesti(keskustelu, lahettaja, pvm, web_tunnus, sisalto) VALUES (?, ?, ?, ?, ?)");
 
-        for (int i = 0; i < params.length; i++) {
-            stmt.setObject(i + 1, params[i]);
-        }
+        stmt.setObject(1, tunnus);
+        stmt.setObject(2, lahettaja);
+        stmt.setObject(3, pvm);
+        stmt.setObject(4, webtunnus);
+        stmt.setObject(5, sisalto);
+        
+        
+//        for (int i = 0; i < params.length; i++) {
+//            stmt.setObject(i + 1, params[i]);
+//        }
 
-        int changes = stmt.executeUpdate();
+        stmt.executeUpdate();
 
         stmt.close();
         connection.close();

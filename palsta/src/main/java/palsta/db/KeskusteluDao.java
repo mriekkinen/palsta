@@ -34,7 +34,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
             String webTunnus = rs.getString("web_tunnus");
             String otsikko = rs.getString("otsikko");
             int viestejaYhteensa = rs.getInt("viesteja");
-            Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
+            Timestamp viimeisin = rs.getTimestamp("viimeisin");
 
             keskustelut.add(new Keskustelu(tunnus, alue, webTunnus, otsikko, viestejaYhteensa, viimeisin));
         }
@@ -107,7 +107,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         connection.close();
     }
 
-    @Override
+   
     public void insert(Object... params) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, webTunnus, otsikko) VALUES (?, ?, ?)");

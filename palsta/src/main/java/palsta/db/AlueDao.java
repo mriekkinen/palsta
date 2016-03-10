@@ -165,7 +165,7 @@ public class AlueDao implements Dao<Alue, Integer> {
         connection.close();
     }
 
-    @Override
+ 
     public void insert(Object... params) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(webTunnus, nimi) VALUES (?, ?)");
