@@ -33,7 +33,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
             Integer alue = rs.getInt("alue");
             String otsikko = rs.getString("otsikko");
             int viestejaYhteensa = rs.getInt("viesteja");
-            Timestamp viimeisin = rs.getTimestamp("viimeisin");
+            Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
 
             keskustelut.add(new Keskustelu(tunnus, alue, otsikko, viestejaYhteensa, viimeisin));
         }

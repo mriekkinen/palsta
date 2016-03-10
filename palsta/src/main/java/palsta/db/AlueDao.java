@@ -57,7 +57,7 @@ public class AlueDao implements Dao<Alue, Integer> {
         int tunnus = rs.getInt("tunnus");
         int keskustelu = rs.getInt("keskustelu");
         String lahettaja = rs.getString("lahettaja");
-        Timestamp pvm = rs.getTimestamp("pvm");
+        Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
         String sisalto = rs.getString("sisalto");
         String webTunnus = rs.getString("web_tunnus");
         String nimi = rs.getString("nimi");
@@ -142,7 +142,7 @@ public class AlueDao implements Dao<Alue, Integer> {
             String webTunnus = rs.getString("web_tunnus");
             String nimi = rs.getString("alue");
             int viestejaYhteensa = rs.getInt("viesteja");
-            Timestamp viimeisin = rs.getTimestamp("viimeisin");
+            Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
 
             lista.add(new Alue(tunnus, webTunnus, nimi, viestejaYhteensa, viimeisin));
         }

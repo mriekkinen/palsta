@@ -24,7 +24,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int tunnus = rs.getInt("tunnus");
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
-            Timestamp pvm = rs.getTimestamp("pvm");
+            Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
             String sisalto = rs.getString("sisalto");
 
             viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto));
@@ -76,7 +76,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
 
-            Timestamp pvm = rs.getTimestamp("pvm");
+            Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
 
             String sisalto = rs.getString("sisalto");
 
