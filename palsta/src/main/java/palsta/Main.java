@@ -20,6 +20,7 @@ public class Main {
         AlueDao alueDao = new AlueDao(db);
         KeskusteluDao keskusteluDao = new KeskusteluDao(db);
         ViestiDao viestiDao = new ViestiDao(db);
+        Calendar calendar = Calendar.getInstance();
 
         List<Alue> alueet = alueDao.findAll();
 
@@ -87,10 +88,7 @@ public class Main {
             String viesti = req.queryParams("viesti");
             //java.util.Date date= new java.util.Date();
 
-            Calendar calendar = Calendar.getInstance();
-
             java.util.Date now = calendar.getTime();
-
             java.sql.Timestamp timestamp = new java.sql.Timestamp(now.getTime());
 
             viestiDao.insert(tunnus, lahettaja, timestamp, viesti);
@@ -117,10 +115,7 @@ public class Main {
             String viesti = req.queryParams("viesti");
             int alueTunnus = alueDao.findOne(webTunnus).getTunnus();
 
-            Calendar calendar = Calendar.getInstance();
-
             java.util.Date now = calendar.getTime();
-
             java.sql.Timestamp timestamp = new java.sql.Timestamp(now.getTime());
 
             keskusteluDao.insert(alueTunnus, otsikko);

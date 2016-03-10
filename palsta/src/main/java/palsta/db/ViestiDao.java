@@ -1,10 +1,16 @@
 package palsta.db;
 
 import java.sql.*;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import palsta.pojo.*;
 
 public class ViestiDao implements Dao<Viesti, Integer> {
+
+    public static final String dateTimePattern = "yyyy-MM-dd HH:mm:ss";
+    public static final DateFormat dateFormat = new SimpleDateFormat(dateTimePattern);
 
     private Database database;
 
@@ -111,7 +117,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
 
         stmt.setObject(1, tunnus);
         stmt.setObject(2, lahettaja);
-        stmt.setObject(3, pvm);
+        stmt.setObject(3, dateFormat.format(pvm));
         stmt.setObject(4, sisalto);
 
         stmt.executeUpdate();
