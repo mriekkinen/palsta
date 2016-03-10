@@ -13,15 +13,9 @@ public class AlueDao implements Dao<Alue, Integer> {
         this.database = d;
     }
 
-    public int messagesInArea(Integer key) throws SQLException { //viestien määrä alueessa
+    public int countDiscussions(Integer key) throws SQLException { //keskustelujen määrä alueella
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) "
-                + "FROM Alue a "
-                + " JOIN Keskustelu k "
-                + "     ON ? = k.alue "
-                + " JOIN Viesti v "
-                + "     ON k.tunnus = v.keskustelu "
-                + "GROUP BY a.nimi");
+        PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM Keskustelu WHERE alue = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -30,45 +24,13 @@ public class AlueDao implements Dao<Alue, Integer> {
             return 0;
         }
 
-        int viesteja = rs.getInt("COUNT(*)");
+        int lkm = rs.getInt(1);
 
         rs.close();
         stmt.close();
         connection.close();
 
-        return viesteja;
-    }
-
-    public Viesti newestMessageInArea(Integer key) throws SQLException { // alueen uusin viesti
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT v.tunnus, v.keskustelu, v.lahettaja, v.pvm, v.sisalto FROM Alue a "
-                + "JOIN Keskustelu k ON ? = k.alue "
-                + "JOIN Viesti v ON k.tunnus = v.keskustelu "
-                + "ORDER BY v.pvm "
-                + "LIMIT 1");
-        stmt.setObject(1, key);
-
-        ResultSet rs = stmt.executeQuery();
-        boolean hasOne = rs.next();
-        if (!hasOne) {
-            return null;
-        }
-
-        int tunnus = rs.getInt("tunnus");
-        int keskustelu = rs.getInt("keskustelu");
-        String lahettaja = rs.getString("lahettaja");
-        Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
-        String sisalto = rs.getString("sisalto");
-        String webTunnus = rs.getString("web_tunnus");
-        String nimi = rs.getString("nimi");
-
-        Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto);
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return viesti;
+        return lkm;
     }
 
     @Override
@@ -95,8 +57,6 @@ public class AlueDao implements Dao<Alue, Integer> {
 
         return alue;
     }
-    
-   
 
     public Alue findOne(String webTunnus) throws SQLException {
         Connection connection = database.getConnection();
@@ -167,7 +127,6 @@ public class AlueDao implements Dao<Alue, Integer> {
         connection.close();
     }
 
- 
     public void insert(String webTunnus, String nimi) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Alue(webTunnus, nimi) VALUES (?, ?)");

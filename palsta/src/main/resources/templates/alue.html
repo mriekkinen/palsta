@@ -14,7 +14,6 @@
         <div class="container">
             <h2 th:text="${title}">Keskustelupalsta</h2>
             <p>Tällä alueella on seuraavat keskustelut:</p>
-            <p>Tällä hetkellä näyttää kaikki kannasta löytyvät keskustelut. DAO-luokkaan voisi lisätä sopivan metodin.</p>
             <p><a th:href="@{~/avaa/{t}(t=${alueenWebTunnus})}">Avaa uusi keskustelu</a></p>
             <table class="table table-striped">
                 <thead>
@@ -36,6 +35,30 @@
                     </tr>
                 </tbody>
             </table>
+
+            <nav th:if="${naytaSivujenNavigointi}">
+                <ul class="pagination">
+                    <li th:class="${onkoEnsimmainenSivu} ? 'disabled'">
+                        <a aria-label="Edellinen"
+                           th:href="@{~/alue/{t}(t=${alueenWebTunnus},sivu=${edellinenSivu})}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="sivu: ${sivut}"
+                        th:class="${sivu==nykyinenSivu} ? 'active'">
+                        <a th:text="${sivu}"
+                           th:href="@{~/alue/{t}(t=${alueenWebTunnus},sivu=${sivu})}">1</a>
+                    </li>
+
+                    <li th:class="${onkoViimeinenSivu} ? 'disabled'">
+                        <a aria-label="Seuraava"
+                           th:href="@{~/alue/{t}(t=${alueenWebTunnus},sivu=${seuraavaSivu})}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </body>
 

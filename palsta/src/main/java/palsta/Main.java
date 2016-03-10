@@ -10,6 +10,9 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 public class Main {
 
+    public static final int keskusteluitaSivulla = 2;
+    public static final int viestejaSivulla = 10;
+
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // 1. Käynnistä projekti Netbeansissa
         // 2. Mene selaimella osoitteeseen http://localhost:4567/
@@ -30,30 +33,44 @@ public class Main {
 
         get("/alue/:webTunnus", (req, res) -> {
             String webTunnus = req.params(":webTunnus");
-            List<Keskustelu> keskustelut = keskusteluDao.findTenNewest(webTunnus);
+            Alue alue = alueDao.findOne(webTunnus);
+            int nykyinenSivu = muunna(req.queryParams("sivu"), 1);
+            int offset = keskusteluitaSivulla * (nykyinenSivu - 1);
+            int yhteensa = alueDao.countDiscussions(alue.getTunnus());
+            List<Keskustelu> keskustelut = keskusteluDao.findOffset(webTunnus, keskusteluitaSivulla, offset);
+            List<Integer> sivut = listaaSivut(yhteensa, keskusteluitaSivulla);
 
             HashMap map = new HashMap<>();
-            map.put("title", alueDao.findOne(webTunnus).getNimi());
+            map.put("title", alue.getNimi());
             map.put("keskustelut", keskustelut);
             map.put("alueenWebTunnus", webTunnus);
+
+            lisaaSivujenVaihdonMuuttujat(map, sivut, nykyinenSivu);
 
             return new ModelAndView(map, "alue");
         }, new ThymeleafTemplateEngine());
 
         get("/keskustelu/:tunnus", (req, res) -> {
-            int tunnus = muunna(req.params(":tunnus"));
-            List<Viesti> viestit = viestiDao.findConvosMessages(tunnus);
+            int tunnus = muunna(req.params(":tunnus"), -1);
+            Keskustelu keskustelu = keskusteluDao.findOne(tunnus);
+            int nykyinenSivu = muunna(req.queryParams("sivu"), 1);
+            int offset = viestejaSivulla * (nykyinenSivu - 1);
+            int yhteensa = keskustelu.getViestejaYhteensa();
+            List<Viesti> viestit = viestiDao.findDiscussion(tunnus, viestejaSivulla, offset);
+            List<Integer> sivut = listaaSivut(yhteensa, viestejaSivulla);
 
             HashMap map = new HashMap<>();
-            map.put("title", keskusteluDao.findOne(tunnus).getOtsikko());
+            map.put("title", keskustelu.getOtsikko());
             map.put("viestit", viestit);
-            map.put("keskustelunTunnus", tunnus);
+            map.put("keskustelu", tunnus);
+
+            lisaaSivujenVaihdonMuuttujat(map, sivut, nykyinenSivu);
 
             return new ModelAndView(map, "keskustelu");
         }, new ThymeleafTemplateEngine());
 
-        get("/vastaa/:keskustelunTunnus", (req, res) -> {
-            int tunnus = muunna(req.params(":keskustelunTunnus"));
+        get("/vastaa/:keskustelu", (req, res) -> {
+            int tunnus = muunna(req.params(":keskustelu"), -1);
             Keskustelu keskustelu = keskusteluDao.findOne(tunnus);
 
             HashMap map = new HashMap<>();
@@ -64,7 +81,7 @@ public class Main {
         }, new ThymeleafTemplateEngine());
 
         post("/vastaa", (req, res) -> {
-            int tunnus = muunna(req.queryParams("keskustelunTunnus"));
+            int tunnus = muunna(req.queryParams("keskustelu"), -1);
 
             String lahettaja = req.queryParams("nimimerkki");
             String viesti = req.queryParams("viesti");
@@ -106,25 +123,44 @@ public class Main {
 
             java.sql.Timestamp timestamp = new java.sql.Timestamp(now.getTime());
 
-           keskusteluDao.insert(alueTunnus, otsikko);
-           
-           
-           
-           viestiDao.insert(keskusteluDao.findPrimaryKey(otsikko),nimimerkki, timestamp, viesti);
-           
-           //res.redirect("/" + webTunnus);
-           
+            keskusteluDao.insert(alueTunnus, otsikko);
+
+            viestiDao.insert(keskusteluDao.findPrimaryKey(otsikko), nimimerkki, timestamp, viesti);
+
+            //res.redirect("/" + webTunnus);
             return nimimerkki + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
         });
 
     }
 
-    private static int muunna(String merkkijono) {
+    private static int muunna(String merkkijono, int oletusarvo) {
         try {
             return Integer.parseInt(merkkijono);
         } catch (NumberFormatException e) {
-            return -1;
+            return oletusarvo;
         }
+    }
+
+    private static List<Integer> listaaSivut(int alkioita, int alkioitaPerSivu) {
+        List<Integer> sivut = new ArrayList<>();
+        int sivu = 1;
+        while (alkioita > 0) {
+            sivut.add(sivu);
+            sivu++;
+            alkioita -= alkioitaPerSivu;
+        }
+
+        return sivut;
+    }
+
+    private static void lisaaSivujenVaihdonMuuttujat(HashMap map, List<Integer> sivut, int nykyinenSivu) {
+        map.put("naytaSivujenNavigointi", true);
+        map.put("sivut", sivut);
+        map.put("nykyinenSivu", nykyinenSivu);
+        map.put("edellinenSivu", Math.max(1, Math.min(sivut.size(), nykyinenSivu - 1)));
+        map.put("seuraavaSivu", Math.max(1, Math.min(sivut.size(), nykyinenSivu + 1)));
+        map.put("onkoEnsimmainenSivu", nykyinenSivu <= 1);
+        map.put("onkoViimeinenSivu", nykyinenSivu >= sivut.size());
     }
 
 }

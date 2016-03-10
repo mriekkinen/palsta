@@ -12,17 +12,18 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         this.database = d;
     }
 
-    public List<Viesti> findConvosMessages(Integer key) throws SQLException { // Jonkin keskustelun viestit
+    public List<Viesti> findDiscussion(Integer keskustelu, int limit, int offset) throws SQLException { // Jonkin keskustelun viestit
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE keskustelu = ?");
-        stmt.setObject(1, key);
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE keskustelu = ? LIMIT ? OFFSET ?");
+        stmt.setObject(1, keskustelu);
+        stmt.setObject(2, limit);
+        stmt.setObject(3, offset);
 
         ResultSet rs = stmt.executeQuery();
 
         List<Viesti> viestit = new ArrayList<>();
         while (rs.next()) {
             int tunnus = rs.getInt("tunnus");
-            int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
             Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
             String sisalto = rs.getString("sisalto");
