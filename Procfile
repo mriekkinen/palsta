@@ -1,1 +1,1 @@
-web: java -cp palsta/target/classes:palsta/target/dependency/* palsta.Main
+web: java -cp target/classes:target/dependency/* palsta.Main

@@ -24,7 +24,7 @@ public class Main {
 
         // Käytetään oletuksena paikallista sqlite-tietokantaa
         // Jos heroku antaa käyttöömme tietokantaosoitteen, otetaan se käyttöön
-        String jdbcOsoite = "jdbc:sqlite:../tietokannat/keskustelut.db";
+        String jdbcOsoite = "jdbc:sqlite:tietokannat/keskustelut.db";
         if (System.getenv("DATABASE_URL") != null) {
             jdbcOsoite = System.getenv("DATABASE_URL");
         }
