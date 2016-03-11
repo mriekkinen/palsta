@@ -81,10 +81,10 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     public int findPrimaryKey(String otsikko) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT tunnus FROM Keskustelu WHERE otsikko = ?");
-
         stmt.setObject(1, otsikko);
         ResultSet rs = stmt.executeQuery();
 
+        rs.next();
         Integer tunnus = rs.getInt("tunnus");
 
         rs.close();
