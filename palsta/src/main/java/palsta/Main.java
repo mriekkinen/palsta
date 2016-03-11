@@ -16,7 +16,20 @@ public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // 1. Käynnistä projekti Netbeansissa
         // 2. Mene selaimella osoitteeseen http://localhost:4567/
-        Database db = new Database("jdbc:sqlite:../tietokannat/keskustelut.db");
+
+        // Asetetaan portti, jos heroku antaa PORT-ympäristömuuttujan
+        if (System.getenv("PORT") != null) {
+            port(Integer.valueOf(System.getenv("PORT")));
+        }
+
+        // Käytetään oletuksena paikallista sqlite-tietokantaa
+        // Jos heroku antaa käyttöömme tietokantaosoitteen, otetaan se käyttöön
+        String jdbcOsoite = "jdbc:sqlite:../tietokannat/keskustelut.db";
+        if (System.getenv("DATABASE_URL") != null) {
+            jdbcOsoite = System.getenv("DATABASE_URL");
+        }
+
+        Database db = new Database(jdbcOsoite);
         AlueDao alueDao = new AlueDao(db);
         KeskusteluDao keskusteluDao = new KeskusteluDao(db);
         ViestiDao viestiDao = new ViestiDao(db);
