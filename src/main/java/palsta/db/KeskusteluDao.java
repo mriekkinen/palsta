@@ -35,7 +35,9 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     @Override
     public Keskustelu findOne(Integer key) throws SQLException {
-        List<Keskustelu> lista = query.queryAndCollect(selectQueryStart + "WHERE k.tunnus = ?", key);
+        List<Keskustelu> lista = query.queryAndCollect(selectQueryStart
+                + "WHERE k.tunnus = ? "
+                + "GROUP BY k.tunnus", key);
 
         if (lista.isEmpty()) {
             return null;
