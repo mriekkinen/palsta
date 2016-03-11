@@ -143,7 +143,8 @@ public class Main {
     }
 
     private static java.sql.Timestamp now() {
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Helsinki"));
+        TimeZone zone = TimeZone.getTimeZone("Europe/Helsinki");
+        Calendar calendar = new GregorianCalendar(zone);
         return new java.sql.Timestamp(calendar.getTime().getTime());
     }
 
