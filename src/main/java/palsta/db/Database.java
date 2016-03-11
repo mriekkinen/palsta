@@ -30,4 +30,8 @@ public class Database {
         return DriverManager.getConnection(databaseAddress);
     }
 
+    public boolean hasTimestampType() {
+        return databaseAddress.contains("postgres");
+    }
+
 }

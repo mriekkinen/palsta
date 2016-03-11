@@ -19,7 +19,9 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     public KeskusteluDao(Database d) throws SQLException {
         this.database = d;
-        this.query = new QueryMaker<>(database.getConnection(), new Keskustelukeraaja());
+        DateHelper dateHelper = new DateHelper(d.hasTimestampType());
+        Keskustelukeraaja keraaja = new Keskustelukeraaja(dateHelper);
+        this.query = new QueryMaker<>(database.getConnection(), keraaja);
     }
 
     public List<Keskustelu> findOffset(String webtunnus, int limit, int offset) throws SQLException {

@@ -8,9 +8,11 @@ import palsta.pojo.*;
 public class AlueDao implements Dao<Alue, Integer> {
 
     private Database database;
+    private DateHelper dateHelper;
 
     public AlueDao(Database d) {
         this.database = d;
+        this.dateHelper = new DateHelper(d.hasTimestampType());
     }
 
     public int countDiscussions(Integer key) throws SQLException { //keskustelujen määrä alueella
@@ -102,7 +104,7 @@ public class AlueDao implements Dao<Alue, Integer> {
             String webTunnus = rs.getString("web_tunnus");
             String nimi = rs.getString("alue");
             int viestejaYhteensa = rs.getInt("viesteja");
-            Timestamp viimeisin = Timestamp.valueOf(rs.getString("viimeisin"));
+            Timestamp viimeisin = dateHelper.getTimestamp(rs, "viimeisin");
 
             lista.add(new Alue(tunnus, webTunnus, nimi, viestejaYhteensa, viimeisin));
         }

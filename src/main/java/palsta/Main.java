@@ -14,8 +14,8 @@ public class Main {
     public static final int viestejaSivulla = 10;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        // 1. Käynnistä projekti Netbeansissa
-        // 2. Mene selaimella osoitteeseen http://localhost:4567/
+        // Osoite: http://keskustelupalsta.herokuapp.com/
+        // Paikallinen versio: http://localhost:4567/)
 
         // Asetetaan portti, jos heroku antaa PORT-ympäristömuuttujan
         if (System.getenv("PORT") != null) {

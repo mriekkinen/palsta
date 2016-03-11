@@ -1,21 +1,18 @@
 package palsta.db;
 
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import palsta.pojo.*;
 
 public class ViestiDao implements Dao<Viesti, Integer> {
 
-    public static final String dateTimePattern = "yyyy-MM-dd HH:mm:ss";
-    public static final DateFormat dateFormat = new SimpleDateFormat(dateTimePattern);
-
     private Database database;
+    private DateHelper dateHelper;
 
     public ViestiDao(Database d) {
         this.database = d;
+        this.dateHelper = new DateHelper(d.hasTimestampType());
     }
 
     public List<Viesti> findDiscussion(Integer keskustelu, int limit, int offset) throws SQLException { // Jonkin keskustelun viestit
@@ -31,7 +28,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         while (rs.next()) {
             int tunnus = rs.getInt("tunnus");
             String lahettaja = rs.getString("lahettaja");
-            Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
+            Timestamp pvm = dateHelper.getTimestamp(rs, "pvm");
             String sisalto = rs.getString("sisalto");
 
             viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto));
@@ -58,7 +55,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         int tunnus = rs.getInt("tunnus");
         int keskustelu = rs.getInt("keskustelu");
         String lahettaja = rs.getString("lahettaja");
-        Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
+        Timestamp pvm = dateHelper.getTimestamp(rs, "pvm");
         String sisalto = rs.getString("sisalto");
 
         Viesti viesti = new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto);
@@ -82,9 +79,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
             int tunnus = rs.getInt("tunnus");
             int keskustelu = rs.getInt("keskustelu");
             String lahettaja = rs.getString("lahettaja");
-
-            Timestamp pvm = Timestamp.valueOf(rs.getString("pvm"));
-
+            Timestamp pvm = dateHelper.getTimestamp(rs, "pvm");
             String sisalto = rs.getString("sisalto");
 
             viestit.add(new Viesti(tunnus, keskustelu, lahettaja, pvm, sisalto));
@@ -117,7 +112,7 @@ public class ViestiDao implements Dao<Viesti, Integer> {
 
         stmt.setObject(1, tunnus);
         stmt.setObject(2, lahettaja);
-        stmt.setObject(3, dateFormat.format(pvm));
+        stmt.setObject(3, dateHelper.saveAs(pvm));
         stmt.setObject(4, sisalto);
 
         stmt.executeUpdate();
