@@ -99,7 +99,8 @@ public class Main {
             String viesti = req.queryParams("viesti");
 
             viestiDao.insert(keskustelu, lahettaja, now(), viesti);
-            //res.redirect("/keskustelu/" + keskustelu);
+
+            res.redirect("keskustelu/" + keskustelu);
             return lahettaja + ": " + viesti + " (keskustelu " + keskustelu + ")";
         });
 
@@ -128,7 +129,7 @@ public class Main {
                 viestiDao.insert(keskustelu, lahettaja, now(), viesti);
             }
 
-            //res.redirect("/" + webTunnus);
+            res.redirect("keskustelu/" + keskustelu);
             return lahettaja + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
         });
 
