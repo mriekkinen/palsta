@@ -29,8 +29,9 @@
                                 alueen nimi
                             </a>
                         </td>
-                        <td th:text="${alue.viestejaYhteensa}"> </td>
-                        <td th:text="${alue.uusinViesti}"> </td>
+                        <td th:text="${alue.viestejaYhteensa}"></td>
+                        <td th:with="pvm=${alue.uusinViesti}"
+                            th:text="${pvm != null} ? ${#dates.format(pvm,'yyyy-MM-dd HH:mm:ss')}"></td>
                     </tr>
                 </tbody>
             </table>

@@ -30,8 +30,9 @@
                                 keskustelun otsikko
                             </a>
                         </td>
-                        <td th:text="${keskustelu.viestejaYhteensa}"> </td>
-                        <td th:text="${keskustelu.uusinViesti}"> </td>
+                        <td th:text="${keskustelu.viestejaYhteensa}"></td>
+                        <td th:with="pvm=${keskustelu.uusinViesti}"
+                            th:text="${pvm != null} ? ${#dates.format(pvm,'yyyy-MM-dd HH:mm:ss')}"></td>
                     </tr>
                 </tbody>
             </table>
