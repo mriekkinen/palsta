@@ -106,11 +106,11 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         connection.close();
     }
 
-    public void insert(int tunnus, String lahettaja, Timestamp pvm, String sisalto) throws SQLException {
+    public void insert(int keskustelu, String lahettaja, Timestamp pvm, String sisalto) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskustelu, lahettaja, pvm, sisalto) VALUES (?, ?, ?, ?)");
 
-        stmt.setObject(1, tunnus);
+        stmt.setObject(1, keskustelu);
         stmt.setObject(2, lahettaja);
         stmt.setObject(3, dateHelper.saveAs(pvm));
         stmt.setObject(4, sisalto);

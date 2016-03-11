@@ -94,18 +94,15 @@ public class Main {
         }, new ThymeleafTemplateEngine());
 
         post("/vastaa", (req, res) -> {
-            int tunnus = muunna(req.queryParams("keskustelu"), -1);
+            int keskustelu = muunna(req.queryParams("keskustelu"), -1);
 
             String lahettaja = req.queryParams("nimimerkki");
             String viesti = req.queryParams("viesti");
-            //java.util.Date date= new java.util.Date();
+            java.sql.Timestamp now = new java.sql.Timestamp(calendar.getTime().getTime());
 
-            java.util.Date now = calendar.getTime();
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(now.getTime());
-
-            viestiDao.insert(tunnus, lahettaja, timestamp, viesti);
-            res.redirect("/keskustelu/" + tunnus);
-            return lahettaja + ": " + viesti + " (keskustelu " + tunnus + ")";
+            viestiDao.insert(keskustelu, lahettaja, now, viesti);
+            //res.redirect("/keskustelu/" + keskustelu);
+            return lahettaja + ": " + viesti + " (keskustelu " + keskustelu + ")";
         });
 
         get("avaa/:alueenWebTunnus", (req, res) -> {
@@ -123,19 +120,18 @@ public class Main {
         post("avaa", (req, res) -> {   //// KESKUSTELU
             String webTunnus = req.queryParams("alueenWebTunnus");
             String otsikko = req.queryParams("otsikko");
-            String nimimerkki = req.queryParams("nimimerkki");
+            String lahettaja = req.queryParams("nimimerkki");
             String viesti = req.queryParams("viesti");
             int alueTunnus = alueDao.findOne(webTunnus).getTunnus();
 
-            java.util.Date now = calendar.getTime();
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(now.getTime());
+            java.sql.Timestamp now = new java.sql.Timestamp(calendar.getTime().getTime());
 
             keskusteluDao.insert(alueTunnus, otsikko);
 
-            viestiDao.insert(keskusteluDao.findPrimaryKey(otsikko), nimimerkki, timestamp, viesti);
+            viestiDao.insert(keskusteluDao.findPrimaryKey(otsikko), lahettaja, now, viesti);
 
             //res.redirect("/" + webTunnus);
-            return nimimerkki + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
+            return lahettaja + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
         });
 
     }
