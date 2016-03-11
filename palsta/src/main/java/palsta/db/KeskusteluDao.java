@@ -7,7 +7,7 @@ import palsta.pojo.Keskustelu;
 public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     private Database database;
-    private QueryMaker query;
+    private QueryMaker<Keskustelu> query;
 
     private final String selectQueryStart = ""
             + "SELECT k.tunnus, k.alue, k.otsikko, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin "
@@ -19,7 +19,7 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     public KeskusteluDao(Database d) throws SQLException {
         this.database = d;
-        this.query = new QueryMaker(database.getConnection(), new Keskustelukeraaja());
+        this.query = new QueryMaker<>(database.getConnection(), new Keskustelukeraaja());
     }
 
     public List<Keskustelu> findOffset(String webtunnus, int limit, int offset) throws SQLException {
