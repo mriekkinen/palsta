@@ -1,0 +1,57 @@
+CREATE TABLE Alue (tunnus serial PRIMARY KEY, web_tunnus varchar(100) NOT NULL UNIQUE, nimi varchar(100) NOT NULL);
+
+CREATE INDEX idx_web_tunnus ON Alue(web_tunnus);
+
+CREATE TABLE Keskustelu (tunnus serial PRIMARY KEY, alue integer NOT NULL, otsikko varchar(250) NOT NULL, FOREIGN KEY(alue) REFERENCES Alue(tunnus));
+
+CREATE TABLE Viesti (tunnus serial PRIMARY KEY, keskustelu integer NOT NULL, lahettaja varchar(100) NOT NULL, pvm TIMESTAMP NOT NULL, sisalto text NOT NULL, FOREIGN KEY(keskustelu) REFERENCES Keskustelu(tunnus));
+
+
+INSERT INTO Alue VALUES(1,'ohjelmointi','Ohjelmointi');
+INSERT INTO Alue VALUES(2,'urheilu','Urheilu');
+INSERT INTO Alue VALUES(3,'musiikki','Musiikki');
+INSERT INTO Alue VALUES(4,'lemmikit','Lemmikit');
+
+INSERT INTO Keskustelu VALUES(1,1,'Java on jees!');
+INSERT INTO Keskustelu VALUES(2,1,'Python on jeesimpi!');
+INSERT INTO Keskustelu VALUES(3,1,'C++ on paras');
+INSERT INTO Keskustelu VALUES(4,2,'Jalkapallo - kuningaslaji');
+INSERT INTO Keskustelu VALUES(5,2,'Salibandy on parasta');
+INSERT INTO Keskustelu VALUES(6,2,'On vain jääkiekko');
+INSERT INTO Keskustelu VALUES(7,2,'Vain yleisurheilu on urheilua');
+INSERT INTO Keskustelu VALUES(8,3,'Elvis on kuningas');
+INSERT INTO Keskustelu VALUES(9,3,'Rock vai pop');
+INSERT INTO Keskustelu VALUES(10,3,'Suomalainen musiikki on kuraa!');
+INSERT INTO Keskustelu VALUES(11,4,'Koirat on söpöjä');
+INSERT INTO Keskustelu VALUES(12,4,'Kissat on kivoja');
+INSERT INTO Keskustelu VALUES(13,4,'Saukot on vekkuleita');
+INSERT INTO Keskustelu VALUES(14,4,'Pelastakaa jääkarhut!');
+
+INSERT INTO Viesti VALUES(1,1,'Arto','2016-02-24 13:22:50','Ihan selvästi on paras');
+INSERT INTO Viesti VALUES(2,1,'Matti','2016-02-24 13:24:08','Enpä ole niin varma.');
+INSERT INTO Viesti VALUES(3,2,'Ismo','2016-02-24 13:24:59','Tätähän ei tarvitse edes perustella.');
+INSERT INTO Viesti VALUES(4,3,'Maija','2016-02-24 13:25:51','Näin olen lukenut.');
+INSERT INTO Viesti VALUES(5,4,'Jari','2016-02-24 13:27:03','Mikä muu muka?');
+INSERT INTO Viesti VALUES(6,4,'Kalle','2016-02-24 13:28:22','Pyh! Liikaa filmaamista. Ei semmoista jaksa katsoa.');
+INSERT INTO Viesti VALUES(7,5,'Ida','2016-02-24 13:29:22','Halpaa ja helppoa!');
+INSERT INTO Viesti VALUES(8,6,'Arto','2016-02-24 13:31:17','Jääkiekossa on kaikkea - vauhtia ja vaarallisia tilanteita.');
+INSERT INTO Viesti VALUES(9,6,'Teemu','2016-02-24 13:31:56','Olen samaa mieltä.');
+INSERT INTO Viesti VALUES(10,7,'Lasse','2016-02-24 13:33:22','Kaikki voivat juosta ja missä ja milloin vain, joten yleisurheilu on paras laji.');
+INSERT INTO Viesti VALUES(11,7,'Matti','2016-02-24 13:33:59','Onpas huono perustelu.');
+INSERT INTO Viesti VALUES(12,8,'Jenna','2016-02-24 13:35:15','Ja hän elää vielä! :o');
+INSERT INTO Viesti VALUES(13,8,'Arto','2016-02-24 13:35:51','Puppua!');
+INSERT INTO Viesti VALUES(14,8,'Jenna','2016-02-24 13:36:27','Kyllä se on totta! Wikipediassa luki niin.');
+INSERT INTO Viesti VALUES(15,8,'Arto','2016-02-24 13:37:19','Älä usko kaikkea mitä Wikipediassa lukee.');
+INSERT INTO Viesti VALUES(16,9,'Maija','2016-02-24 13:38:14','Ehdottomasti rock.');
+INSERT INTO Viesti VALUES(17,9,'Ismo','2016-02-24 13:39:11','Ei kumpikaan. Klassinen musiikki on parasta.');
+INSERT INTO Viesti VALUES(18,10,'Pete','2016-02-24 13:40:33','Näin on!');
+INSERT INTO Viesti VALUES(19,11,'Mira','2016-02-24 13:41:34','Rakastan koiria! Ne on ihania ja mahdottoman söpöjä!');
+INSERT INTO Viesti VALUES(20,11,'John','2016-02-24 13:42:43','Kissat on koiria paljon fiksumpia.');
+INSERT INTO Viesti VALUES(21,12,'John','2016-02-24 13:43:37','Välillä kyllä pelottaa kun ne lähtee ulos seikkailemaan.');
+INSERT INTO Viesti VALUES(22,13,'Sauli','2016-02-24 13:44:45','Suosittelen katsomaan dokkareita saukoista. On nääs veikeitä otuksia.');
+INSERT INTO Viesti VALUES(23,13,'Ida','2016-02-24 13:47:47','Joo niin on! Viime viikolla juuri tuli kiva dokkari TV:stä.');
+INSERT INTO Viesti VALUES(24,14,'Ada','2016-02-24 13:50:27','Ilmastonlämpeneminen on vakava uhka jääkarhuille! Ihmisten on pakko tehdä jotain, etteivät ne kuole sukupuuttoon!');
+INSERT INTO Viesti VALUES(25,14,'Pete','2016-02-24 13:51:05','Ilmastonlämpeneminen on huuhaata.');
+INSERT INTO Viesti VALUES(26,14,'Jaska','2016-02-24 13:52:07','Jääkarhut on kyllä mahdottoman siistejä.');
+INSERT INTO Viesti VALUES(27,14,'Tarja','2016-02-24 13:54:04','Mitä voimme oikein tehdä?');
+INSERT INTO Viesti VALUES(28,14,'Henna','2016-02-24 13:54:46','Pitää elää ympäristöystävällisemmin.');
