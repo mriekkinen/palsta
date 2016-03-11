@@ -4,7 +4,7 @@ CREATE INDEX idx_web_tunnus ON Alue(web_tunnus);
 
 CREATE TABLE Keskustelu (tunnus serial PRIMARY KEY, alue integer NOT NULL, otsikko varchar(250) NOT NULL, FOREIGN KEY(alue) REFERENCES Alue(tunnus));
 
-CREATE TABLE Viesti (tunnus serial PRIMARY KEY, keskustelu integer NOT NULL, lahettaja varchar(100) NOT NULL, pvm TIMESTAMPTZ(0) NOT NULL, sisalto text NOT NULL, FOREIGN KEY(keskustelu) REFERENCES Keskustelu(tunnus));
+CREATE TABLE Viesti (tunnus serial PRIMARY KEY, keskustelu integer NOT NULL, lahettaja varchar(100) NOT NULL, pvm TIMESTAMP(0) NOT NULL, sisalto text NOT NULL, FOREIGN KEY(keskustelu) REFERENCES Keskustelu(tunnus));
 
 
 INSERT INTO Alue (web_tunnus, nimi) VALUES('ohjelmointi','Ohjelmointi');

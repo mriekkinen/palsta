@@ -34,4 +34,8 @@ public class Database {
         return databaseAddress.contains("postgres");
     }
 
+    public boolean isPostgreSQL() {
+        return databaseAddress.contains("postgres");
+    }
+
 }

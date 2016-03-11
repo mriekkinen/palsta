@@ -33,7 +33,6 @@ public class Main {
         AlueDao alueDao = new AlueDao(db);
         KeskusteluDao keskusteluDao = new KeskusteluDao(db);
         ViestiDao viestiDao = new ViestiDao(db);
-        Calendar calendar = Calendar.getInstance();
 
         get("/", (req, res) -> {
             List<Alue> alueet = alueDao.findAll();
@@ -98,9 +97,8 @@ public class Main {
 
             String lahettaja = req.queryParams("nimimerkki");
             String viesti = req.queryParams("viesti");
-            java.sql.Timestamp now = new java.sql.Timestamp(calendar.getTime().getTime());
 
-            viestiDao.insert(keskustelu, lahettaja, now, viesti);
+            viestiDao.insert(keskustelu, lahettaja, now(), viesti);
             //res.redirect("/keskustelu/" + keskustelu);
             return lahettaja + ": " + viesti + " (keskustelu " + keskustelu + ")";
         });
@@ -122,13 +120,13 @@ public class Main {
             String otsikko = req.queryParams("otsikko");
             String lahettaja = req.queryParams("nimimerkki");
             String viesti = req.queryParams("viesti");
-            int alueTunnus = alueDao.findOne(webTunnus).getTunnus();
+            int alue = alueDao.findOne(webTunnus).getTunnus();
 
-            java.sql.Timestamp now = new java.sql.Timestamp(calendar.getTime().getTime());
+            int keskustelu = keskusteluDao.insert(alue, otsikko);
 
-            keskusteluDao.insert(alueTunnus, otsikko);
-
-            viestiDao.insert(keskusteluDao.findPrimaryKey(otsikko), lahettaja, now, viesti);
+            if (keskustelu != -1) {
+                viestiDao.insert(keskustelu, lahettaja, now(), viesti);
+            }
 
             //res.redirect("/" + webTunnus);
             return lahettaja + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
@@ -142,6 +140,11 @@ public class Main {
         } catch (NumberFormatException e) {
             return oletusarvo;
         }
+    }
+
+    private static java.sql.Timestamp now() {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Helsinki"));
+        return new java.sql.Timestamp(calendar.getTime().getTime());
     }
 
     private static List<Integer> listaaSivut(int alkioita, int alkioitaPerSivu) {

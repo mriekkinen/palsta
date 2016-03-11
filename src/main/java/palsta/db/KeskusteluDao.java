@@ -65,34 +65,44 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         connection.close();
     }
 
-    public void insert(int alue, String otsikko) throws SQLException {
+    public int insert(int alue, String otsikko) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, otsikko) VALUES (?, ?)");
+        PreparedStatement stmt = connection.prepareStatement(
+                "INSERT INTO Keskustelu(alue, otsikko) VALUES (?, ?)",
+                new String[]{"tunnus"});
 
         stmt.setObject(1, alue);
         stmt.setObject(2, otsikko);
 
         int changes = stmt.executeUpdate();
 
-        stmt.close();
-        connection.close();
-    }
+        ResultSet rs = stmt.getGeneratedKeys();
 
-    public int findPrimaryKey(String otsikko) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT tunnus FROM Keskustelu WHERE otsikko = ?");
-        stmt.setObject(1, otsikko);
-        ResultSet rs = stmt.executeQuery();
+        int keskustelu = -1;
+        if (rs != null && rs.next()) {
+            keskustelu = rs.getInt(1);
+        }
 
-        rs.next();
-        Integer tunnus = rs.getInt("tunnus");
-
-        rs.close();
         stmt.close();
         connection.close();
 
-        return tunnus;
-
+        return keskustelu;
     }
 
+//    public int findPrimaryKey(String otsikko) throws SQLException {
+//        Connection connection = database.getConnection();
+//        PreparedStatement stmt = connection.prepareStatement("SELECT tunnus FROM Keskustelu WHERE otsikko = ?");
+//        stmt.setObject(1, otsikko);
+//        ResultSet rs = stmt.executeQuery();
+//
+//        rs.next();
+//        Integer tunnus = rs.getInt("tunnus");
+//
+//        rs.close();
+//        stmt.close();
+//        connection.close();
+//
+//        return tunnus;
+//
+//    }
 }

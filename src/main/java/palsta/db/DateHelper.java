@@ -26,7 +26,12 @@ public class DateHelper {
             return rs.getTimestamp(columnLabel);
         }
 
-        return Timestamp.valueOf(rs.getString(columnLabel));
+        String timeString = rs.getString(columnLabel);
+        if (timeString == null) {
+            return null;
+        }
+
+        return Timestamp.valueOf(timeString);
     }
 
     public Object saveAs(Timestamp timestamp) {
@@ -38,6 +43,10 @@ public class DateHelper {
             return timestamp;
         }
 
+        return dateFormat.format(timestamp);
+    }
+
+    public String toString(Timestamp timestamp) {
         return dateFormat.format(timestamp);
     }
 
