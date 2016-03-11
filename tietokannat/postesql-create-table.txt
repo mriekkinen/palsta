@@ -4,7 +4,7 @@ CREATE INDEX idx_web_tunnus ON Alue(web_tunnus);
 
 CREATE TABLE Keskustelu (tunnus serial PRIMARY KEY, alue integer NOT NULL, otsikko varchar(250) NOT NULL, FOREIGN KEY(alue) REFERENCES Alue(tunnus));
 
-CREATE TABLE Viesti (tunnus serial PRIMARY KEY, keskustelu integer NOT NULL, lahettaja varchar(100) NOT NULL, pvm TIMESTAMP NOT NULL, sisalto text NOT NULL, FOREIGN KEY(keskustelu) REFERENCES Keskustelu(tunnus));
+CREATE TABLE Viesti (tunnus serial PRIMARY KEY, keskustelu integer NOT NULL, lahettaja varchar(100) NOT NULL, pvm TIMESTAMPTZ(0) NOT NULL, sisalto text NOT NULL, FOREIGN KEY(keskustelu) REFERENCES Keskustelu(tunnus));
 
 
 INSERT INTO Alue (web_tunnus, nimi) VALUES('ohjelmointi','Ohjelmointi');
@@ -12,20 +12,20 @@ INSERT INTO Alue (web_tunnus, nimi) VALUES('urheilu','Urheilu');
 INSERT INTO Alue (web_tunnus, nimi) VALUES('musiikki','Musiikki');
 INSERT INTO Alue (web_tunnus, nimi) VALUES('lemmikit','Lemmikit');
 
-INSERT INTO (alue, otsikko) Keskustelu VALUES(1,'Java on jees!');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(1,'Python on jeesimpi!');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(1,'C++ on paras');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(2,'Jalkapallo - kuningaslaji');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(2,'Salibandy on parasta');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(2,'On vain jääkiekko');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(2,'Vain yleisurheilu on urheilua');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(3,'Elvis on kuningas');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(3,'Rock vai pop');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(3,'Suomalainen musiikki on kuraa!');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(4,'Koirat on söpöjä');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(4,'Kissat on kivoja');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(4,'Saukot on vekkuleita');
-INSERT INTO (alue, otsikko) Keskustelu VALUES(4,'Pelastakaa jääkarhut!');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(1,'Java on jees!');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(1,'Python on jeesimpi!');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(1,'C++ on paras');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(2,'Jalkapallo - kuningaslaji');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(2,'Salibandy on parasta');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(2,'On vain jääkiekko');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(2,'Vain yleisurheilu on urheilua');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(3,'Elvis on kuningas');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(3,'Rock vai pop');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(3,'Suomalainen musiikki on kuraa!');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(4,'Koirat on söpöjä');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(4,'Kissat on kivoja');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(4,'Saukot on vekkuleita');
+INSERT INTO Keskustelu (alue, otsikko) VALUES(4,'Pelastakaa jääkarhut!');
 
 INSERT INTO Viesti (keskustelu, lahettaja, pvm, sisalto) VALUES(1,'Arto','2016-02-24 13:22:50','Ihan selvästi on paras');
 INSERT INTO Viesti (keskustelu, lahettaja, pvm, sisalto) VALUES(1,'Matti','2016-02-24 13:24:08','Enpä ole niin varma.');
