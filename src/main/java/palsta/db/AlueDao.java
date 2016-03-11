@@ -91,7 +91,7 @@ public class AlueDao implements Dao<Alue, Integer> {
                 + " FROM Alue a"
                 + " LEFT JOIN Keskustelu k"
                 + " ON a.tunnus = k.alue"
-                + " INNER JOIN Viesti v"
+                + " LEFT JOIN Viesti v"
                 + " ON k.tunnus = v.keskustelu"
                 + " GROUP BY a.tunnus"
                 + " ORDER BY alue");
