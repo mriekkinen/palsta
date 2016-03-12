@@ -116,7 +116,7 @@ public class Main {
             return new ModelAndView(map, "avaa");
         }, new ThymeleafTemplateEngine());
 
-        post("avaa", (req, res) -> {   //// KESKUSTELU
+        post("avaa", (req, res) -> {
             String webTunnus = req.queryParams("alueenWebTunnus");
             String otsikko = req.queryParams("otsikko");
             String lahettaja = req.queryParams("nimimerkki");

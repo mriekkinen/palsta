@@ -10,7 +10,8 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     private QueryMaker<Keskustelu> query;
 
     private final String selectQueryStart = ""
-            + "SELECT k.tunnus, k.alue, k.otsikko, COUNT(v.tunnus) AS viesteja, MAX(v.pvm) AS viimeisin "
+            + "SELECT k.tunnus, k.alue, k.otsikko, COUNT(v.tunnus) AS viesteja,"
+            + " MAX(v.pvm) AS viimeisin "
             + "FROM Alue a "
             + "INNER JOIN Keskustelu k "
             + "ON a.tunnus = k.alue "
@@ -33,6 +34,29 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
                 webtunnus, limit, offset);
     }
 
+    public int insert(int alue, String otsikko) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, otsikko) "
+                + "VALUES (?, ?)", new String[]{"tunnus"});
+
+        stmt.setObject(1, alue);
+        stmt.setObject(2, otsikko);
+
+        stmt.executeUpdate();
+
+        ResultSet rs = stmt.getGeneratedKeys();
+
+        int keskustelu = -1;
+        if (rs != null && rs.next()) {
+            keskustelu = rs.getInt(1);
+        }
+
+        stmt.close();
+        connection.close();
+
+        return keskustelu;
+    }
+
     @Override
     public Keskustelu findOne(Integer key) throws SQLException {
         List<Keskustelu> lista = query.queryAndCollect(selectQueryStart
@@ -53,56 +77,4 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
                 + "ORDER BY viimeisin DESC");
     }
 
-    @Override
-    public void delete(Integer key) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("DELETE FROM Keskustelu WHERE tunnus = ?");
-        stmt.setObject(1, key);
-        ResultSet rs = stmt.executeQuery();
-        rs.next();
-        rs.close();
-        stmt.close();
-        connection.close();
-    }
-
-    public int insert(int alue, String otsikko) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement(
-                "INSERT INTO Keskustelu(alue, otsikko) VALUES (?, ?)",
-                new String[]{"tunnus"});
-
-        stmt.setObject(1, alue);
-        stmt.setObject(2, otsikko);
-
-        int changes = stmt.executeUpdate();
-
-        ResultSet rs = stmt.getGeneratedKeys();
-
-        int keskustelu = -1;
-        if (rs != null && rs.next()) {
-            keskustelu = rs.getInt(1);
-        }
-
-        stmt.close();
-        connection.close();
-
-        return keskustelu;
-    }
-
-//    public int findPrimaryKey(String otsikko) throws SQLException {
-//        Connection connection = database.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement("SELECT tunnus FROM Keskustelu WHERE otsikko = ?");
-//        stmt.setObject(1, otsikko);
-//        ResultSet rs = stmt.executeQuery();
-//
-//        rs.next();
-//        Integer tunnus = rs.getInt("tunnus");
-//
-//        rs.close();
-//        stmt.close();
-//        connection.close();
-//
-//        return tunnus;
-//
-//    }
 }

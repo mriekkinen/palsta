@@ -5,7 +5,7 @@ import java.sql.*;
 public class Keskustelu {
 
     private Integer tunnus;
-    private Integer alue; // Alueen PK
+    private Integer alue;
     private String otsikko;
     private int viestejaYhteensa;
     private Timestamp uusinViesti;

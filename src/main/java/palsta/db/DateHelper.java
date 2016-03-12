@@ -1,10 +1,7 @@
 package palsta.db;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.sql.*;
+import java.text.*;
 
 public class DateHelper {
 
