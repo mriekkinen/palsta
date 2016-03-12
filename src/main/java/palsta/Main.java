@@ -1,6 +1,7 @@
 package palsta;
 
 import java.sql.*;
+import java.time.*;
 import java.util.*;
 import palsta.pojo.*;
 import palsta.db.*;
@@ -15,7 +16,7 @@ public class Main {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // Osoite: http://keskustelupalsta.herokuapp.com/
-        // Paikallinen versio: http://localhost:4567/)
+        // Paikallinen versio: http://localhost:4567/
 
         // Asetetaan portti, jos heroku antaa PORT-ympäristömuuttujan
         if (System.getenv("PORT") != null) {
@@ -144,9 +145,9 @@ public class Main {
     }
 
     private static java.sql.Timestamp now() {
-        TimeZone zone = TimeZone.getTimeZone("Europe/Helsinki");
-        Calendar calendar = new GregorianCalendar(zone);
-        return new java.sql.Timestamp(calendar.getTime().getTime());
+        ZoneId timeZone = ZoneId.of("Europe/Helsinki");
+        ZonedDateTime now = ZonedDateTime.now(timeZone);
+        return new java.sql.Timestamp(now.toEpochSecond() * 1000);
     }
 
     private static List<Integer> listaaSivut(int alkioita, int alkioitaPerSivu) {
