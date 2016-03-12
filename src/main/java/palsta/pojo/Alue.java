@@ -22,7 +22,7 @@ public class Alue {
         this.uusinViesti = uusin;
     }
 
-    public Integer getTunnus() {
+    public int getTunnus() {
         return this.tunnus;
     }
 

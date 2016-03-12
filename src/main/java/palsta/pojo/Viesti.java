@@ -4,13 +4,13 @@ import java.sql.*;
 
 public class Viesti {
 
-    private Integer tunnus;
-    private Integer keskustelu; // keskustelun PK 
+    private int tunnus;
+    private int keskustelu;
     private String lahettaja;
     private Timestamp pvm;
     private String sisalto;
 
-    public Viesti(Integer tunnus, Integer keskustelu, String lahettaja, Timestamp pvm, String sisalto) {
+    public Viesti(int tunnus, int keskustelu, String lahettaja, Timestamp pvm, String sisalto) {
         this.tunnus = tunnus;
         this.keskustelu = keskustelu;
         this.lahettaja = lahettaja;
@@ -18,11 +18,11 @@ public class Viesti {
         this.sisalto = sisalto;
     }
 
-    public Integer getTunnus() {
+    public int getTunnus() {
         return this.tunnus;
     }
 
-    public Integer getKeskustelu() {
+    public int getKeskustelu() {
         return this.keskustelu;
     }
 
