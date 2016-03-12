@@ -31,7 +31,7 @@
                         </td>
                         <td th:text="${alue.viestejaYhteensa}"></td>
                         <td th:with="pvm=${alue.uusinViesti}"
-                            th:text="${pvm != null} ? ${#dates.format(pvm,'yyyy-MM-dd HH:mm:ss')}"></td>
+                            th:text="${pvm != null} ? ${#dates.format(pvm,'yyyy-MM-dd HH:mm')}"></td>
                     </tr>
                 </tbody>
             </table>
