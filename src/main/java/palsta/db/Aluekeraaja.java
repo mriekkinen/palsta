@@ -15,7 +15,7 @@ public class Aluekeraaja implements Collector<Alue> {
     public Alue collect(ResultSet rs) throws SQLException {
         Integer tunnus = rs.getInt("tunnus");
         String webTunnus = rs.getString("web_tunnus");
-        String nimi = rs.getString("alue");
+        String nimi = rs.getString("nimi");
         int viestejaYhteensa = rs.getInt("viesteja");
         Timestamp viimeisin = dateHelper.getTimestamp(rs, "viimeisin");
 

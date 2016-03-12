@@ -15,7 +15,7 @@ public class DateHelper {
     }
 
     public Timestamp getTimestamp(ResultSet rs, String columnLabel) throws SQLException {
-        if (rs == null) {
+        if (rs == null || columnLabel == null) {
             return null;
         }
 
