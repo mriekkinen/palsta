@@ -28,20 +28,10 @@ public class ViestiDao implements Dao<Viesti, Integer> {
         return lista;
     }
 
-    public void insert(int keskustelu, String lahettaja, Timestamp pvm, String sisalto) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskustelu, lahettaja, pvm, sisalto) "
-                + "VALUES (?, ?, ?, ?)");
-
-        stmt.setObject(1, keskustelu);
-        stmt.setObject(2, lahettaja);
-        stmt.setObject(3, dateHelper.saveAs(pvm));
-        stmt.setObject(4, sisalto);
-
-        stmt.executeUpdate();
-
-        stmt.close();
-        connection.close();
+    public int insert(int keskustelu, String lahettaja, Timestamp pvm, String sisalto) throws SQLException {
+        return query.insert("INSERT INTO Viesti(keskustelu, lahettaja, pvm, sisalto) "
+                + "VALUES (?, ?, ?, ?)",
+                keskustelu, lahettaja, dateHelper.saveAs(pvm), sisalto);
     }
 
     @Override

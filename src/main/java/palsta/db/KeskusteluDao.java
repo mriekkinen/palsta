@@ -35,26 +35,8 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     public int insert(int alue, String otsikko) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Keskustelu(alue, otsikko) "
-                + "VALUES (?, ?)", new String[]{"tunnus"});
-
-        stmt.setObject(1, alue);
-        stmt.setObject(2, otsikko);
-
-        stmt.executeUpdate();
-
-        ResultSet rs = stmt.getGeneratedKeys();
-
-        int keskustelu = -1;
-        if (rs != null && rs.next()) {
-            keskustelu = rs.getInt(1);
-        }
-
-        stmt.close();
-        connection.close();
-
-        return keskustelu;
+        return query.insert("INSERT INTO Keskustelu(alue, otsikko) "
+                + "VALUES (?, ?)", alue, otsikko);
     }
 
     @Override

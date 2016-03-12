@@ -95,7 +95,6 @@ public class Main {
 
         post("/vastaa", (req, res) -> {
             int keskustelu = muunna(req.queryParams("keskustelu"), -1);
-
             String lahettaja = req.queryParams("nimimerkki");
             String viesti = req.queryParams("viesti");
 
@@ -107,7 +106,6 @@ public class Main {
 
         get("avaa/:alueenWebTunnus", (req, res) -> {
             String webTunnus = req.params(":alueenWebTunnus");
-
             Alue alue = alueDao.findOne(webTunnus);
 
             HashMap map = new HashMap<>();
