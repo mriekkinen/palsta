@@ -30,8 +30,12 @@ public class AlueDao implements Dao<Alue, Integer> {
         return query.queryInteger("SELECT COUNT(*) FROM Keskustelu WHERE alue = ?", key);
     }
 
+    public boolean nameExists(String nimi) throws SQLException {
+        return query.queryInteger("SELECT COUNT(*) FROM Alue WHERE nimi = ?", nimi) > 0;
+    }
+
     public int insert(String webTunnus, String nimi) throws SQLException {
-        return query.insert("INSERT INTO Alue(webTunnus, nimi) VALUES (?, ?)", webTunnus, nimi);
+        return query.insert("INSERT INTO Alue(web_tunnus, nimi) VALUES (?, ?)", webTunnus, nimi);
     }
 
     public Alue findOne(String webTunnus) throws SQLException {

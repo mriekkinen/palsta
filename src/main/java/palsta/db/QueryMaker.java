@@ -64,6 +64,7 @@ public class QueryMaker<T> {
             generatedKey = rs.getInt(1);
         }
 
+        rs.close();
         stmt.close();
         return generatedKey;
     }

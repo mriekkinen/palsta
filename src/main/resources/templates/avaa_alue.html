@@ -1,0 +1,44 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title th:text="${title}">Avaa uusi keskustelualue</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h2 th:text="${title}">Avaa uusi keskustelualue</h2>
+            <p>
+                Luotavalle alueelle määritellään nimi ja web-tunnus.
+            </p>
+            <form method="POST" action="/avaa_alue" role="form">
+                <div class="form-group" th:classappend="${virheNimi != null} ? has-error">
+                    <label for="nimi">Nimi:</label>
+                    <input type="text" name="nimi" id="nimi" class="form-control" placeholder="Syötä alueen nimi"
+                           th:value="${nimi != null} ? ${nimi}"
+                           aria-describedby="selitysNimi" />
+                    <span id="selitysNimi" class="help-block">
+                        <span th:if="${virheNimi != null}" th:text="${virheNimi}"></span>
+                    </span>
+                </div>
+                <div class="form-group" th:classappend="${virheWebTunnus != null} ? has-error">
+                    <label for="webTunnus">Web-tunnus:</label>
+                    <input type="text" name="webTunnus" id="webTunnus" th:class="form-control" placeholder="Syötä alueen web-tunnus"
+                           th:value="${webTunnus != null} ? ${webTunnus}"
+                           aria-describedby="selitysWebTunnus" />
+                    <span id="selitysWebTunnus" class="help-block">
+                        <span th:if="${virheWebTunnus != null}" th:text="${virheWebTunnus}"></span>
+                        <span th:if="${virheWebTunnus == null}">Web-tunnus näkyy alueen verkko-osoitteessa.</span>
+                    </span>
+                </div>
+                <button type="submit" class="btn btn-default">Luo alue</button>
+            </form>
+        </div>
+    </body>
+
+</html>

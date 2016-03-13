@@ -132,6 +132,39 @@ public class Main {
             return lahettaja + ": " + otsikko + ", " + viesti + " (" + webTunnus + ")";
         });
 
+        get("avaa_alue", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("title", "Avaa uusi keskustelualue");
+            return new ModelAndView(map, "avaa_alue");
+        }, new ThymeleafTemplateEngine());
+
+        post("avaa_alue", (req, res) -> {
+            String nimi = req.queryParams("nimi");
+            String webTunnus = req.queryParams("webTunnus");
+            boolean virhe = false;
+
+            HashMap map = new HashMap<>();
+            map.put("title", "Avaa uusi keskustelualue");
+            map.put("nimi", nimi);
+            map.put("webTunnus", webTunnus);
+
+            if (alueDao.nameExists(nimi)) {
+                map.put("virheNimi", "Määritelty nimi on jo toisen alueen käytössä");
+                virhe = true;
+            }
+
+            if (alueDao.findOne(webTunnus) != null) {
+                map.put("virheWebTunnus", "Määritelty web-tunnus on jo toisen alueen käytössä");
+                virhe = true;
+            }
+
+            if (!virhe) {
+                alueDao.insert(webTunnus, nimi);
+                res.redirect("/");
+            }
+
+            return new ModelAndView(map, "avaa_alue");
+        }, new ThymeleafTemplateEngine());
     }
 
     private static int muunna(String merkkijono, int oletusarvo) {
